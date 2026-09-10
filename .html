@@ -2689,6 +2689,17 @@ function saveVisualEditToExistingFile(updatedHtml) {
     return true;
 }
 
+function getDockPositionMode() {
+    return localStorage.getItem("miwy_dock_position_mode") || "floating";
+}
+
+function setDockPositionMode(mode) {
+    localStorage.setItem("miwy_dock_position_mode", mode);
+    updateDockSettingsUI();
+    restoreDockPosition();
+    updatePreview();
+}
+
 function getDockOrientation() {
     return localStorage.getItem("miwy_dock_orientation") || "horizontal";
 }
@@ -2700,8 +2711,27 @@ function setDockOrientation(orient) {
 }
 
 function updateDockSettingsUI() {
-    const orient = getDockOrientation();
+    const posMode = getDockPositionMode();
+    const floatingBtn = document.getElementById("dockPosFloatingBtn");
+    const fixedBtn = document.getElementById("dockPosFixedBtn");
+    const floatingCheck = document.getElementById("dockPosFloatingCheck");
+    const fixedCheck = document.getElementById("dockPosFixedCheck");
 
+    if (floatingBtn && fixedBtn) {
+        if (posMode === "fixed") {
+            fixedBtn.style.borderColor = "var(--orange)";
+            floatingBtn.style.borderColor = "rgba(255,255,255,0.06)";
+            if (fixedCheck) fixedCheck.style.display = "inline";
+            if (floatingCheck) floatingCheck.style.display = "none";
+        } else {
+            floatingBtn.style.borderColor = "var(--orange)";
+            fixedBtn.style.borderColor = "rgba(255,255,255,0.06)";
+            if (floatingCheck) floatingCheck.style.display = "inline";
+            if (fixedCheck) fixedCheck.style.display = "none";
+        }
+    }
+
+    const orient = getDockOrientation();
     const horizBtn = document.getElementById("dockOrientHorizontalBtn");
     const vertBtn = document.getElementById("dockOrientVerticalBtn");
 
@@ -2731,15 +2761,23 @@ function restoreDockPosition() {
     const parentDock = document.getElementById("parentVisualDock");
     if (!parentDock) return;
 
-    parentDock.style.left = "50%";
-    parentDock.style.top = "auto";
-    parentDock.style.bottom = "20px";
-    parentDock.style.right = "auto";
-    parentDock.style.transform = "translateX(-50%)";
+    const posMode = getDockPositionMode();
+    if (posMode === "fixed") {
+        parentDock.style.top = "10px";
+        parentDock.style.left = "50%";
+        parentDock.style.bottom = "auto";
+        parentDock.style.right = "auto";
+        parentDock.style.transform = "translateX(-50%)";
+    } else {
+        parentDock.style.left = "50%";
+        parentDock.style.top = "auto";
+        parentDock.style.bottom = "20px";
+        parentDock.style.right = "auto";
+        parentDock.style.transform = "translateX(-50%)";
+    }
     savedDockPosition = null;
     try {
         localStorage.removeItem("miwy_dock_pos");
-        localStorage.removeItem("miwy_dock_orientation");
     } catch (e) { /* ignore */ }
 }
 
@@ -3679,34 +3717,6 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 <\/script>
 `; 
 
-    const runtimeErrorInterceptorScript = `
-<script>
-(function() {
-    window.onerror = function(msg, url, line, col, error) {
-        window.parent.postMessage({
-            type: 'preview-runtime-error',
-            msg: String(msg),
-            url: String(url),
-            line: line || 1,
-            col: col || 1,
-            stack: error ? String(error.stack) : ""
-        }, '*');
-        return false;
-    };
-    window.addEventListener('unhandledrejection', function(e) {
-        window.parent.postMessage({
-            type: 'preview-runtime-error',
-            msg: "Unhandled Rejection: " + (e.reason ? (e.reason.message || String(e.reason)) : "Promesa rechazada"),
-            url: "",
-            line: 1,
-            col: 1,
-            stack: e.reason && e.reason.stack ? String(e.reason.stack) : ""
-        }, '*');
-    });
-})();
-<\/script>
-`;
-
     if(!/<meta\s+name=["']viewport["']/i.test(html)) {
         const viewportMeta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
         if(html.includes("<head>")){
@@ -3717,9 +3727,9 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
     }
 
     if(html.includes("<head>")){ 
-        html = html.replace("<head>", "<head>" + runtimeErrorInterceptorScript + visualEditorScript); 
+        html = html.replace("<head>", "<head>" + visualEditorScript);
     } else { 
-        html = runtimeErrorInterceptorScript + visualEditorScript + html; 
+        html = visualEditorScript + html;
     }
 
     const previewFrame = document.getElementById("previewFrame");
@@ -3745,7 +3755,7 @@ function sendDockCommand(action, value) {
 }
 
 /* =====================================================  
-    POSTMESSAGE DE EDICIÓN VISUAL Y ERRORES DE RUNTIME
+    POSTMESSAGE DE EDICIÓN VISUAL
 ===================================================== */  
 window.addEventListener("message", function(event) { 
     if (!event.data) return; 
@@ -3757,95 +3767,7 @@ window.addEventListener("message", function(event) {
         }
         return; 
     } 
-
-    if (event.data.type === 'preview-runtime-error') {
-        const errorData = event.data;
-        handleRuntimeAppError(errorData);
-        return;
-    }
 }); 
-
-function handleRuntimeAppError(errorData) {
-    const project = typeof getCurrentProject === "function" ? getCurrentProject() : null;
-    if (!project || !project.files) return;
-
-    let targetFile = currentFileName || "index.html";
-    if (!project.files[targetFile]) {
-        targetFile = Object.keys(project.files).find(f => getFileType(f) === "js" || getFileType(f) === "html") || Object.keys(project.files)[0];
-    }
-
-    const msg = errorData.msg || "Error de ejecución";
-    const line = errorData.line || 1;
-
-    showCustomDialog({
-        title: "⚠️ Detección Automática de Error en la Aplicación",
-        description: `La aplicación sufrió un error runtime:\n\n• Archivo: ${targetFile}\n• Línea: ${line}\n• Causa: ${msg}\n\n¿Deseas aplicar una corrección segura automática sin eliminar tu código?`,
-        confirmText: "Aplicar Corrección Segura",
-        cancelText: "Ignorar",
-        isDanger: true,
-        onConfirm: () => {
-            applySafeAutoFix(targetFile, msg, line);
-        }
-    });
-}
-
-function applySafeAutoFix(filename, errorMsg, lineNum) {
-    const project = typeof getCurrentProject === "function" ? getCurrentProject() : null;
-    if (!project || !project.files || !project.files[filename]) return;
-
-    let code = project.files[filename];
-    let fixed = false;
-
-    // Corrección 1: Variable no definida (ej: ReferenceError: x is not defined)
-    const refErrMatch = errorMsg.match(/(?:ReferenceError:\s*|is not defined:?\s*)([a-zA-Z0-9_$]+)/) || errorMsg.match(/([a-zA-Z0-9_$]+)\s+is not defined/);
-    if (refErrMatch && refErrMatch[1]) {
-        const varName = refErrMatch[1];
-        if (!code.includes(`let ${varName}`) && !code.includes(`var ${varName}`) && !code.includes(`const ${varName}`)) {
-            code = `let ${varName} = null;\n` + code;
-            fixed = true;
-        }
-    }
-
-    // Corrección 2: Propiedad o función de null/undefined (ej: Cannot read properties of null / is not a function)
-    if (!fixed && (errorMsg.includes("null") || errorMsg.includes("undefined") || errorMsg.includes("is not a function"))) {
-        const lines = code.split("\n");
-        const idx = Math.max(0, Math.min(lines.length - 1, lineNum - 1));
-        if (lines[idx] && !lines[idx].includes("try {")) {
-            lines[idx] = `try { ${lines[idx]} } catch(e) { console.warn('Safe AutoFix caught runtime error:', e); }`;
-            code = lines.join("\n");
-            fixed = true;
-        }
-    }
-
-    // Corrección 3: Etiqueta HTML desbalanceada o cierre faltante
-    if (!fixed && (errorMsg.toLowerCase().includes("syntax") || errorMsg.toLowerCase().includes("unexpected"))) {
-        const lines = code.split("\n");
-        const idx = Math.max(0, Math.min(lines.length - 1, lineNum - 1));
-        if (lines[idx] && lines[idx].trim().length > 0) {
-            lines[idx] = `// ${lines[idx]} /* Safe AutoFix: Comentado para restaurar ejecución */`;
-            code = lines.join("\n");
-            fixed = true;
-        }
-    }
-
-    if (fixed) {
-        project.files[filename] = code;
-        if (currentFileName === filename && typeof codeEditor !== "undefined" && codeEditor) {
-            codeEditor.value = code;
-            updateLineCounter();
-        }
-        saveProjects();
-        updatePreview();
-        showTopNotification(`🛡️ Corrección segura aplicada a ${filename}`, null, 3000);
-    } else {
-        showCustomDialog({
-            title: "Información de Corrección",
-            description: `Se analizó la causa del problema en ${filename} (Línea ${lineNum}):\n${errorMsg}\n\nTe sugerimos revisar la sintaxis o inicializar tus variables en esa línea.`,
-            confirmText: "Entendido",
-            cancelText: null
-        });
-    }
-}
 
 /* =====================================================  
    INICIALIZACIÓN DE CONTROLES AL CARGAR DOM
@@ -3985,6 +3907,12 @@ document.addEventListener("DOMContentLoaded", function() {
             updateDockSettingsUI();
         });
     }
+
+    const floatPosBtn = document.getElementById("dockPosFloatingBtn");
+    const fixedPosBtn = document.getElementById("dockPosFixedBtn");
+
+    if (floatPosBtn) floatPosBtn.addEventListener("click", () => setDockPositionMode("floating"));
+    if (fixedPosBtn) fixedPosBtn.addEventListener("click", () => setDockPositionMode("fixed"));
 
     const horizBtn = document.getElementById("dockOrientHorizontalBtn");
     const vertBtn = document.getElementById("dockOrientVerticalBtn");
@@ -5825,6 +5753,28 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 Controles de Editor Visual  
             </div>  
   
+            <label class="repo-label">Posición de Controles del Editor</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+                <button id="dockPosFloatingBtn" class="settings-option" style="height:48px; border-radius:10px;">
+                    <div class="settings-option-left">
+                        <div>
+                            <strong>Flotante</strong>
+                            <small>Controles móviles arrastrabiles</small>
+                        </div>
+                    </div>
+                    <span id="dockPosFloatingCheck" style="color:var(--orange); font-size:14px; font-weight:bold;">✓</span>
+                </button>
+                <button id="dockPosFixedBtn" class="settings-option" style="height:48px; border-radius:10px;">
+                    <div class="settings-option-left">
+                        <div>
+                            <strong>Superior (Fijo)</strong>
+                            <small>Fijado arriba junto a MIWY</small>
+                        </div>
+                    </div>
+                    <span id="dockPosFixedCheck" style="color:var(--orange); font-size:14px; font-weight:bold; display:none;">✓</span>
+                </button>
+            </div>
+
             <label class="repo-label">Orientación de Controles Flotantes</label>
             <div style="display:flex; gap:8px; margin-bottom:16px;">
                 <button id="dockOrientHorizontalBtn" class="version-action" style="flex:1; height:36px; font-weight:bold;">↔️ Horizontal</button>
