@@ -161,15 +161,15 @@ button{border:0;cursor:pointer}
 .leg.r3{right:0;top:13px;transform:rotate(18deg)}  
 .leg.r4{right:0;top:17px;transform:rotate(35deg)}  
   
-.logo-button{  
-    width:48px;  
-    height:48px;  
+.logo-button{
+    width:48px;
+    height:48px;
     display:flex;  
     align-items:center;  
     justify-content:center;  
-    background: linear-gradient(180deg, #2a323d 0%, #182028 100%);  
-    color:#cbd5e1;  
-    border-radius:12px;  
+    background: linear-gradient(180deg, #2a323d 0%, #182028 100%);
+    color:#cbd5e1;
+    border-radius:12px;
     border: 1px solid rgba(255, 122, 26, 0.25);
     box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -190,7 +190,7 @@ button{border:0;cursor:pointer}
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }  
   
-.logo-button:hover,  
+.logo-button:hover,
 .settings-button:hover{  
     background: linear-gradient(180deg, #2f3742 0%, #1e2630 100%);  
     color:#ffffff;  
@@ -2241,12 +2241,14 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .miwy-project-card {
     width: min(100%, 360px);
     min-height: 112px;
-    padding: 12px;
+    padding: 14px;
     gap: 10px;
-    border-radius: 7px;
-    background: #10161c;
-    border-color: #263442;
-    box-shadow: none;
+    border-radius: 12px;
+    background: rgba(16, 22, 28, 0.45) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 122, 26, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
 .miwy-project-card::before {
@@ -2894,10 +2896,10 @@ body.theme-claro {
     --header-bg: #f1f5f9;
     color: #0f172a;
 }
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
 body.theme-claro .miwy-gallery {
     background: #f8fafc;
     color: #0f172a;
@@ -2922,10 +2924,10 @@ body.theme-claro {
     --header-bg: #f1f5f9;
     color: #0f172a;
 }
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
 body.theme-claro .miwy-gallery {
     background: #f8fafc;
     color: #0f172a;
@@ -3266,10 +3268,10 @@ body.theme-claro {
     --header-bg: #f1f5f9;
     color: #0f172a;
 }
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
 body.theme-claro .miwy-gallery {
     background: #f8fafc;
     color: #0f172a;
@@ -3293,10 +3295,10 @@ body.theme-claro {
     --header-bg: #f1f5f9;
     color: #0f172a;
 }
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
 body.theme-claro .miwy-gallery {
     background: #f8fafc;
     color: #0f172a;
@@ -3326,7 +3328,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
     term.textContent = "$ compile & run " + filename + "\\n";
     term.textContent += "[Compiler Output]: Build successful (0 warnings).\\n";
     term.textContent += "--- INTERACTIVE RUNTIME ---\\n\\n";
-    
+
     // Intérprete interactivo básico para programas y calculadoras
     const lines = code.split("\\n");
     let hasPrinted = false;
@@ -3894,8 +3896,8 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
  
     function sendCleanHtml() { 
         var clone = document.documentElement.cloneNode(true); 
-        var visStyle = clone.querySelector('#__miwy_visual_style__'); 
-        if (visStyle) visStyle.remove(); 
+        var visStyle = clone.querySelector('#__miwy_visual_style__');
+        if (visStyle) visStyle.remove();
  
         var systemElements = clone.querySelectorAll('[data-miwy-system], .miwy-resize-corner, .miwy-move-handle, .miwy-minimal-toolbar, .miwy-floating-dock');
         systemElements.forEach(function(s) { s.remove(); });
@@ -3946,9 +3948,9 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 `;
 
     if(html.includes("<head>")){ 
-        html = html.replace("<head>", "<head>" + runtimeErrorInterceptorScript + visualEditorScript); 
+        html = html.replace("<head>", "<head>" + runtimeErrorInterceptorScript + visualEditorScript);
     } else { 
-        html = runtimeErrorInterceptorScript + visualEditorScript + html; 
+        html = runtimeErrorInterceptorScript + visualEditorScript + html;
     }
 
     const previewFrame = document.getElementById("previewFrame");
@@ -4966,7 +4968,7 @@ function replaceAllMatches() {
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      
+
       const fontSize = Math.min(W() * 0.13, 100);
       ctx.font = `800 ${fontSize}px "Trebuchet MS", "Segoe UI", system-ui, sans-serif`;
 
@@ -5020,7 +5022,7 @@ function replaceAllMatches() {
         this.y = -350;
         this.targetY = H() * 0.48;
         this.size = Math.min(W() * 0.20, 160);
-        
+
         this.legs = [];
         for (let i = 0; i < 8; i++) {
           const side = i < 4 ? -1 : 1;
@@ -5297,7 +5299,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 <header class="topbar">  
   
     <div style="display:flex; align-items:center; gap:10px;">
-        <button class="logo-button" title="Miwy">  
+        <button class="logo-button" title="Miwy">
             <img src="logo.png" alt="Miwy Logo" style="width:100%; height:100%; object-fit:contain;" onerror="this.onerror=null; this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='block';">
             <svg class="logo-fallback-svg" viewBox="0 0 100 100" style="display:none; width:38px; height:38px;">
                 <circle cx="50" cy="50" r="46" fill="#111820" stroke="var(--orange)" stroke-width="6"/>
@@ -5313,8 +5315,8 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 
     <button  
         id="settingsButton"  
-        class="settings-button">  
-        ⚙  
+        class="settings-button">
+        ⚙
     </button>  
   
 </header>  
@@ -5463,7 +5465,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 
                     </div>  
 
-                    <div class="code-footer">  
+                    <div class="code-footer">
                         <span id="fileFooterName" style="display:none;">Sin archivo</span>  
                         <div style="display:flex; align-items:center; gap:6px;">
                             <button id="toggleWordWrapBtn" class="preview-button" onclick="toggleWordWrap()" style="height:22px; padding:0 8px; font-size:10px; color:#aaa;" title="Ajuste de línea (Word Wrap)">↩ Wrap</button>
@@ -5473,7 +5475,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                             <button id="copyCodeBtn" class="preview-button" style="height:22px; padding:0 8px; font-size:10px; color:#aaa; gap:4px;" title="Copiar código al portapapeles">📋 Copiar</button>
                         </div>
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <span id="lineCounter" class="editor-position">Ln 1, Col 1</span>  
+                            <span id="lineCounter" class="editor-position">Ln 1, Col 1</span>
                         </div>
                     </div>  
                 </div>
@@ -5498,13 +5500,13 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 id="panelCreateProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0;">  
-                Crear proyecto  
+                Crear proyecto
             </button>  
             <button  
                 id="panelImportProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0; background: #1a251c; color: var(--green);">  
-                📥 Importar 
+                📥 Importar
             </button>  
         </div> 
     </div>
@@ -5524,25 +5526,25 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
     class="preview-panel"  
     id="previewPanel">  
   
-    <div class="panel-header">  
+    <div class="panel-header">
   
-        <div class="panel-name">  
-            <strong>  
-                Vista de aplicación  
-            </strong>  
-        </div>  
-  
-  
-        <div class="preview-controls">  
-  
+        <div class="panel-name">
+            <strong>
+                Vista de aplicación
+            </strong>
+        </div>
+
+
+        <div class="preview-controls">
+
             <button id="desktopPreview" class="preview-button active" title="Vista Laptop / Escritorio"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>Laptop</button>
             <button id="mobilePreview" class="preview-button" title="Vista Teléfono Movil"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Teléfono</button>
 
-            <span class="panel-name">  
-                <span style="color:#42d66b;">●</span>  
-                Live  
-            </span>  
- 
+            <span class="panel-name">
+                <span style="color:#42d66b;">●</span>
+                Live
+            </span>
+
 
             <button  
                 id="visualEditBtn"  
@@ -5551,15 +5553,15 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 onclick="toggleVisualEdit()">  
                 Editor Visual  
             </button>  
-  
-  
-        </div>  
+
+
+        </div>
   
     </div>  
   
   
     <div class="preview-wrapper-container"> 
-        <div class="preview-wrapper">  
+        <div class="preview-wrapper">
             <iframe  
                 id="previewFrame"  
                 class="preview-frame"  
@@ -5713,13 +5715,13 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 id="createProjectButton"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0;">  
-                Crear proyecto  
+                Crear proyecto
             </button>  
             <button  
                 id="importProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0; background: #1a251c; color: var(--green);">  
-                📥 Importar 
+                📥 Importar
             </button>  
         </div> 
         <input type="file" id="importProjectInput" accept=".zip,.json,.html,.css,.js,.txt,.svg" multiple style="display: none;"> 
@@ -6051,7 +6053,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
             </button>  
   
             <div class="section-title">  
-                Controles de Editor Visual  
+                Controles de Editor Visual
             </div>  
   
             <label class="repo-label">Orientación de Controles Flotantes</label>
@@ -6673,6 +6675,9 @@ function renderFolderManager(dirPath = "/"){
             if (isImage && content && typeof content === "string" && (content.startsWith("data:image") || content.startsWith("http"))) {
                 iconHtml = `<img src="${content}" style="max-width:100%; max-height:48px; object-fit:cover; border-radius:4px; border:1px solid #324252;" alt="${escapeHTML(displayName)}" />`;
             }
+            else if (isVideo && content && typeof content === "string" && (content.startsWith("data:video") || content.startsWith("http") || content.startsWith("blob:"))) {
+                iconHtml = `<video src="${content}" style="max-width:100%; max-height:48px; object-fit:cover; border-radius:4px; border:1px solid #324252; pointer-events:none;" preload="metadata" muted></video>`;
+            }
 
             const item = document.createElement("div");
             item.draggable = true;
@@ -7002,19 +7007,19 @@ function getFileType(filename){
     if (ext === "jsx") return "jsx";  
     if (ext === "tsx") return "tsx";  
     if (ext === "css" || ext === "scss" || ext === "sass" || ext === "less") return "css";  
-    if (ext === "json" || ext === "json5") return "json";  
-    if (ext === "py") return "python";  
-    if (ext === "java") return "java";  
-    if (ext === "asm" || ext === "nasm" || ext === "s") return "asm";  
-    if (ext === "c") return "c";  
-    if (ext === "ld") return "ld";  
-    if (ext === "cpp" || ext === "h" || ext === "hpp" || ext === "cc") return "cpp";  
-    if (ext === "cs") return "csharp";  
+    if (ext === "json" || ext === "json5") return "json";
+    if (ext === "py") return "python";
+    if (ext === "java") return "java";
+    if (ext === "asm" || ext === "nasm" || ext === "s") return "asm";
+    if (ext === "c") return "c";
+    if (ext === "ld") return "ld";
+    if (ext === "cpp" || ext === "h" || ext === "hpp" || ext === "cc") return "cpp";
+    if (ext === "cs") return "csharp";
     if (ext === "php") return "php";  
-    if (ext === "go") return "go";  
-    if (ext === "rs") return "rust";  
-    if (ext === "rb") return "ruby";  
-    if (ext === "sql") return "sql";  
+    if (ext === "go") return "go";
+    if (ext === "rs") return "rust";
+    if (ext === "rb") return "ruby";
+    if (ext === "sql") return "sql";
     if (ext === "md" || ext === "markdown") return "markdown";  
     if (ext === "xml") return "xml";  
     if (ext === "svg") return "svg";  
@@ -7035,19 +7040,19 @@ function getFileIcon(filename){
     if (type === "js") return `<span style="color:#f7df1e; font-weight:bold;">⚡ JS</span>`;  
     if (type === "ts") return `<span style="color:#3178c6; font-weight:bold;">🟦 TS</span>`;  
     if (type === "jsx" || type === "tsx") return `<span style="color:#61dafb; font-weight:bold;">⚛️ React</span>`;  
-    if (type === "json") return `<span style="color:#f29d27; font-weight:bold;">🧩 JSON</span>`;  
-    if (type === "python") return `<span style="color:#3776ab; font-weight:bold;">🐍 Py</span>`;  
-    if (type === "java") return `<span style="color:#5382a1; font-weight:bold;">☕ Java</span>`;  
-    if (type === "asm") return `<span style="color:#ff6a00; font-weight:bold;">⚡ ASM</span>`;  
-    if (type === "c") return `<span style="color:#5599ff; font-weight:bold;">🅒 C</span>`;  
-    if (type === "ld") return `<span style="color:#a855f7; font-weight:bold;">🔗 LD</span>`;  
-    if (type === "cpp") return `<span style="color:#00599c; font-weight:bold;">⚙️ C++</span>`;  
-    if (type === "csharp") return `<span style="color:#68217a; font-weight:bold;">💜 C#</span>`;  
+    if (type === "json") return `<span style="color:#f29d27; font-weight:bold;">🧩 JSON</span>`;
+    if (type === "python") return `<span style="color:#3776ab; font-weight:bold;">🐍 Py</span>`;
+    if (type === "java") return `<span style="color:#5382a1; font-weight:bold;">☕ Java</span>`;
+    if (type === "asm") return `<span style="color:#ff6a00; font-weight:bold;">⚡ ASM</span>`;
+    if (type === "c") return `<span style="color:#5599ff; font-weight:bold;">🅒 C</span>`;
+    if (type === "ld") return `<span style="color:#a855f7; font-weight:bold;">🔗 LD</span>`;
+    if (type === "cpp") return `<span style="color:#00599c; font-weight:bold;">⚙️ C++</span>`;
+    if (type === "csharp") return `<span style="color:#68217a; font-weight:bold;">💜 C#</span>`;
     if (type === "php") return `<span style="color:#777bb4; font-weight:bold;">🐘 PHP</span>`;  
-    if (type === "go") return `<span style="color:#00add8; font-weight:bold;">🐹 Go</span>`;  
-    if (type === "rust") return `<span style="color:#dea584; font-weight:bold;">🦀 Rust</span>`;  
-    if (type === "ruby") return `<span style="color:#cc342d; font-weight:bold;">💎 Ruby</span>`;  
-    if (type === "sql") return `<span style="color:#e38c00; font-weight:bold;">🗄️ SQL</span>`;  
+    if (type === "go") return `<span style="color:#00add8; font-weight:bold;">🐹 Go</span>`;
+    if (type === "rust") return `<span style="color:#dea584; font-weight:bold;">🦀 Rust</span>`;
+    if (type === "ruby") return `<span style="color:#cc342d; font-weight:bold;">💎 Ruby</span>`;
+    if (type === "sql") return `<span style="color:#e38c00; font-weight:bold;">🗄️ SQL</span>`;
     if (type === "markdown") return `<span style="color:#083344; font-weight:bold;">📝 MD</span>`;  
     if (type === "xml") return `<span style="color:#ff6600; font-weight:bold;">🏷️ XML</span>`;  
     if (type === "svg") return `<span style="color:#ffb300; font-weight:bold;">◇ SVG</span>`;  
@@ -7706,10 +7711,10 @@ function updateLineCounter(){
         gutter.scrollTop = codeEditor ? codeEditor.scrollTop : 0;
     }
 
-    if (!currentFileName || codeEditor.disabled) {  
+    if (!currentFileName || codeEditor.disabled) {
         if (lineCounter) lineCounter.textContent = "Ln 1, Col 1";
-        return;  
-    }  
+        return;
+    }
 
     if (lineCounter) lineCounter.textContent = `Ln ${line}, Col ${column}`;
 }  
@@ -8240,10 +8245,10 @@ body.theme-claro {
     --header-bg: #f1f5f9;
     color: #0f172a;
 }
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
 body.theme-claro .miwy-gallery {
     background: #f8fafc;
     color: #0f172a;
@@ -9419,7 +9424,7 @@ window.addEventListener("keydown", function(event) {
             showShortcutToast("Ctrl + E", "Exportando proyecto como ZIP"); 
         } 
     } 
- 
+
  
     // Ctrl + F: Buscar y Reemplazar
     if (isCtrl && key === 'f') {
