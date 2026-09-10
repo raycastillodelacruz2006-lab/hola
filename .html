@@ -3003,83 +3003,6 @@ builtins.input = custom_input
   <div class="svg-box">${activeContent}</div>
 </body>
 </html>`;
-        } else {
-            // Runner / Terminal interactivo genérico para otros lenguajes (C, C++, Java, Rust, Go, C#, PHP, NASM, Bash, etc.)
-            const escapedCode = JSON.stringify(activeContent);
-            const escapedLangName = JSON.stringify(currentFileName);
-            html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<style>
-  body { background: #0a0e14; color: #42d66b; font-family: Consolas, "Courier New", monospace; padding: 20px; margin: 0; }
-  .term-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e2d3d; padding-bottom: 10px; margin-bottom: 15px; color: #94a3b8; font-size: 13px; }
-  .term-box { background: #05080c; border: 1px solid #1b2836; border-radius: 8px; padding: 18px; min-height: 220px; font-size: 13px; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; overflow: auto; }
-  .badge { background: #1e293b; color: #38bdf8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-  .stdin-row { display: flex; gap: 8px; margin-top: 12px; }
-  .stdin-input { flex: 1; background: #070c10; border: 1px solid #1e2d3d; border-radius: 6px; padding: 8px 12px; color: #fff; font-family: inherit; outline: none; font-size: 12px; }
-  .stdin-btn { background: #ff6a00; color: #000; border: none; border-radius: 6px; padding: 0 16px; font-weight: bold; cursor: pointer; font-size: 12px; }
-</style>
-</head>
-<body>
-  <div class="term-header">
-    <span>🖥️ Interactive Terminal App - <strong style="color:#fff;">${escapeHTML(currentFileName)}</strong></span>
-    <span class="badge">Runtime: ${escapeHTML(activeType.toUpperCase())}</span>
-  </div>
-  <div id="term" class="term-box">▶ Compilando y ejecutando programa...\\n</div>
-  <div class="stdin-row">
-    <input type="text" id="stdin" class="stdin-input" placeholder="Ingresa datos/expresiones (ej: 5 + 5)..." onkeydown="if(event.key==='Enter') sendInput()">
-    <button class="stdin-btn" onclick="sendInput()">Enviar STDIN</button>
-  </div>
-  <script>
-    const term = document.getElementById("term");
-    const stdin = document.getElementById("stdin");
-    const code = ${escapedCode};
-    const filename = ${escapedLangName};
-
-    term.textContent = "$ compile & run " + filename + "\\n";
-    term.textContent += "[Compiler Output]: Build successful (0 warnings).\\n";
-    term.textContent += "--- INTERACTIVE RUNTIME ---\\n\\n";
-    
-    // Intérprete interactivo básico para programas y calculadoras
-    const lines = code.split("\\n");
-    let hasPrinted = false;
-    lines.forEach(line => {
-      const trimmed = line.trim();
-      if (trimmed.includes("printf") || trimmed.includes("cout") || trimmed.includes("System.out.println") || trimmed.includes("Console.WriteLine") || trimmed.includes("echo") || trimmed.includes("fmt.Println") || trimmed.includes("println!")) {
-        const match = trimmed.match(/["'](.*?)["']/);
-        if (match) {
-          term.textContent += match[1] + "\\n";
-          hasPrinted = true;
-        }
-      }
-    });
-
-    if (!hasPrinted) {
-      term.textContent += "Programa en ejecución interactiva. Ingresa datos abajo para interactuar.\\n";
-    }
-
-    function sendInput() {
-      const val = stdin.value.trim();
-      if (!val) return;
-      term.textContent += "> " + val + "\\n";
-      try {
-        // Evaluación matemática segura para calculadoras interactiva
-        if (/^[0-9+\\-*\\/().\\s]+$/.test(val)) {
-          const evalRes = Function('"use strict"; return (' + val + ')')();
-          term.textContent += "[Resultado]: " + evalRes + "\\n";
-        } else {
-          term.textContent += "[STDIN Procesado]: " + val + "\\n";
-        }
-      } catch (err) {
-        term.textContent += "⚠️ Output: " + val + "\\n";
-      }
-      stdin.value = "";
-      term.scrollTop = term.scrollHeight;
-    }
-  <\/script>
-</body>
-</html>`;
         }
     }
 
@@ -3645,78 +3568,19 @@ function handleRuntimeAppError(errorData) {
     showCustomDialog({
         title: "⚠️ Detección Automática de Error en la Aplicación",
         description: `La aplicación sufrió un error runtime:\n\n• Archivo: ${targetFile}\n• Línea: ${line}\n• Causa: ${msg}\n\n¿Deseas aplicar una corrección segura automática sin eliminar tu código?`,
-        confirmText: "Aplicar Corrección Segura",
-        cancelText: "Ignorar",
-        isDanger: true,
-        onConfirm: () => {
-            applySafeAutoFix(targetFile, msg, line);
-        }
-    });
-}
-
-function applySafeAutoFix(filename, errorMsg, lineNum) {
-    const project = typeof getCurrentProject === "function" ? getCurrentProject() : null;
-    if (!project || !project.files || !project.files[filename]) return;
-
-    let code = project.files[filename];
-    let fixed = false;
-
-    // Corrección 1: Variable no definida (ej: ReferenceError: x is not defined)
-    const refErrMatch = errorMsg.match(/(?:ReferenceError:\s*|is not defined:?\s*)([a-zA-Z0-9_$]+)/) || errorMsg.match(/([a-zA-Z0-9_$]+)\s+is not defined/);
-    if (refErrMatch && refErrMatch[1]) {
-        const varName = refErrMatch[1];
-        if (!code.includes(`let ${varName}`) && !code.includes(`var ${varName}`) && !code.includes(`const ${varName}`)) {
-            code = `let ${varName} = null;\n` + code;
-            fixed = true;
-        }
-    }
-
-    // Corrección 2: Propiedad o función de null/undefined (ej: Cannot read properties of null / is not a function)
-    if (!fixed && (errorMsg.includes("null") || errorMsg.includes("undefined") || errorMsg.includes("is not a function"))) {
-        const lines = code.split("\n");
-        const idx = Math.max(0, Math.min(lines.length - 1, lineNum - 1));
-        if (lines[idx] && !lines[idx].includes("try {")) {
-            lines[idx] = `try { ${lines[idx]} } catch(e) { console.warn('Safe AutoFix caught runtime error:', e); }`;
-            code = lines.join("\n");
-            fixed = true;
-        }
-    }
-
-    // Corrección 3: Etiqueta HTML desbalanceada o cierre faltante
-    if (!fixed && (errorMsg.toLowerCase().includes("syntax") || errorMsg.toLowerCase().includes("unexpected"))) {
-        const lines = code.split("\n");
-        const idx = Math.max(0, Math.min(lines.length - 1, lineNum - 1));
-        if (lines[idx] && lines[idx].trim().length > 0) {
-            lines[idx] = `// ${lines[idx]} /* Safe AutoFix: Comentado para restaurar ejecución */`;
-            code = lines.join("\n");
-            fixed = true;
-        }
-    }
-
-    if (fixed) {
-        project.files[filename] = code;
-        if (currentFileName === filename && typeof codeEditor !== "undefined" && codeEditor) {
-            codeEditor.value = code;
-            updateLineCounter();
-        }
-        saveProjects();
-        updatePreview();
-        showTopNotification(`🛡️ Corrección segura aplicada a ${filename}`, null, 3000);
-    } else {
-        showCustomDialog({
-            title: "Información de Corrección",
-            description: `Se analizó la causa del problema en ${filename} (Línea ${lineNum}):\n${errorMsg}\n\nTe sugerimos revisar la sintaxis o inicializar tus variables en esa línea.`,
-            confirmText: "Entendido",
-            cancelText: null
+            previewFrame.className = "preview-frame";
+            desktopPreview.classList.add("active");
+            if (mobilePreview) mobilePreview.classList.remove("active");
         });
     }
-}
 
-/* =====================================================  
-   INICIALIZACIÓN DE CONTROLES AL CARGAR DOM
-===================================================== */  
-document.addEventListener("DOMContentLoaded", function() {
-    const previewFrame = document.getElementById("previewFrame");
+    if (mobilePreview && previewFrame) {
+        mobilePreview.addEventListener("click", () => {
+            previewFrame.className = "preview-frame mobile";
+            mobilePreview.classList.add("active");
+            if (desktopPreview) desktopPreview.classList.remove("active");
+        });
+    }
 
 
     // Parent Visual Dock Drag Handler Across Whole Screen (Mouse & Mobile Touch)
@@ -3774,24 +3638,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         document.addEventListener("mouseup", () => {
-            endDockDrag();
-        });
-
-        // Mobile touch events
-        parentHandle.addEventListener("touchstart", (e) => {
-            if (e.touches && e.touches.length > 0) {
-                startDockDrag(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: true });
-
-        document.addEventListener("touchmove", (e) => {
-            if (draggingParentDock && e.touches && e.touches.length > 0) {
-                if (e.cancelable) e.preventDefault();
-                moveDockDrag(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: false });
-
-        document.addEventListener("touchend", () => {
             endDockDrag();
         });
         document.addEventListener("touchcancel", () => {
@@ -5083,6 +4929,7 @@ function replaceAllMatches() {
                             <button id="copyCodeBtn" class="preview-button" style="height:22px; padding:0 8px; font-size:10px; color:#aaa; gap:4px;" title="Copiar código al portapapeles">📋 Copiar</button>
                         </div>
                         <div style="display:flex; align-items:center; gap:10px;">
+                            <span id="editorSaveStatus" style="font-size:10px; color:#42d66b;">● Guardado</span>
                             <span id="lineCounter" class="editor-position">Ln 1, Col 1</span>  
                         </div>
                     </div>  
@@ -5159,6 +5006,18 @@ function replaceAllMatches() {
                 Editor Visual  
             </button>  
   
+                id="desktopPreview"
+                class="preview-button active"
+                title="Vista laptop">
+                Laptop
+            </button>
+
+            <button
+                id="mobilePreview"
+                class="preview-button"
+                title="Vista teléfono">
+                Teléfono
+            </button>
   
         </div>  
   
@@ -5223,19 +5082,6 @@ function replaceAllMatches() {
             Exportar proyecto  
         </div>  
 
-        <div class="dialog-description">  
-            Descarga todo el código fuente de tu proyecto en un archivo comprimido (.zip).  
-        </div>  
-
-        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
-            <label style="display:flex; align-items:center; gap:10px; background:#181818; padding:10px 12px; border-radius:8px; border:1px solid #333;">
-                <input type="radio" name="exportFormat" value="zip" checked style="accent-color:var(--orange);">
-                <div>
-                    <strong style="font-size:12px; color:#fff; display:block;">📦 Archivo ZIP (.zip)</strong>
-                    <small style="font-size:10px; color:#aaa;">Código fuente completo del proyecto</small>
-                </div>
-            </label>
-        </div>
 
         <div class="dialog-buttons">  
 
@@ -5567,6 +5413,33 @@ function replaceAllMatches() {
   
   
   
+                <button
+                    id="themeButton"
+                    class="settings-option">
+
+                    <div class="settings-option-left">
+
+                        <div class="option-icon icon-option-theme">
+                            🎨
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Temas
+                            </strong>
+
+                            <small>
+                                Seleccionar tema de interfaz
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    ›
+
+                </button>
 
                 <button  
                     id="shortcutsButton"  
@@ -5617,30 +5490,8 @@ function replaceAllMatches() {
                 class="section-back"  
                 data-back>  
                 ← Volver  
-            </button>  
-  
-            <div class="section-title">  
-                Atajos de Teclado  
-            </div>  
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Guardar archivo actual</span>
-                    <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + S</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Buscador de código</span>
-                    <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + F</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Crear nuevo archivo</span>
-                    <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Alt + N</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Exportar proyecto (ZIP)</span>
-                    <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + E</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
+                    <span style="font-size:11px; color:#aaa;">Abrir Configuración</span>
                     <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + ,</span>
                 </div>
             </div>
@@ -5681,6 +5532,55 @@ function replaceAllMatches() {
         </div>  
   
   
+        <!-- TEMAS -->
+        <div
+            id="themeSection"
+            class="settings-section">
+
+            <button
+                class="section-back"
+                data-back>
+                ← Volver
+            </button>
+
+            <div class="section-title">
+                Seleccionar Tema
+            </div>
+
+            <div class="version-list">
+                <button class="settings-option theme-option-btn" data-theme="oscuro">
+                    <div class="settings-option-left">
+                        <div class="option-icon" style="background:#111; border: 1px solid #444; width: 24px; height: 24px;"></div>
+                        <div>
+                            <strong>Oscuro</strong>
+                            <small>Fondo oscuro original (predeterminado)</small>
+                        </div>
+                    </div>
+                </button>
+                <button class="settings-option theme-option-btn" data-theme="claro">
+                    <div class="settings-option-left">
+                        <div class="option-icon" style="background:#eee; border: 1px solid #ccc; width: 24px; height: 24px;"></div>
+                        <div>
+                            <strong>Claro</strong>
+                            <small>Interfaz brillante y limpia</small>
+                        </div>
+                        <div>
+                            <strong>Cobalto</strong>
+                            <small>Azul profundo con acentos neón</small>
+                        </div>
+                    </div>
+                </button>
+                <button class="settings-option theme-option-btn" data-theme="monokai">
+                    <div class="settings-option-left">
+                        <div class="option-icon" style="background:#272822; border: 1px solid #f92672; width: 24px; height: 24px;"></div>
+                        <div>
+                            <strong>Monokai</strong>
+                            <small>Estilo de contraste para código</small>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
  
  
         <!-- VERSIONES -->  
@@ -5704,60 +5604,6 @@ function replaceAllMatches() {
             </div>  
   
         </div>  
-  
-  
-    </aside>  
-</div>  
-
-<!-- IMPORTAR PROYECTO DIALOG -->  
-<div  
-    id="importDialog"  
-    class="overlay">  
-
-    <div class="dialog">  
-
-        <div class="dialog-title">  
-            Importar proyecto  
-        </div>  
-
-        <div class="dialog-description">  
-            Selecciona un archivo .zip, .json o archivos web para añadir tu proyecto al editor.  
-        </div>  
-
-        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
-            <label style="display:flex; align-items:center; gap:10px; background:#181818; padding:10px 12px; border-radius:8px; border:1px solid #333;">
-                <input type="radio" name="importFormat" value="files" checked style="accent-color:var(--orange);">
-                <div>
-                    <strong style="font-size:12px; color:#fff; display:block;">Importar archivos</strong>
-                    <small style="font-size:10px; color:#aaa;">ZIP, JSON o archivos HTML/CSS/JS</small>
-                </div>
-            </label>
-        </div>
-
-        <div class="dialog-buttons">  
-
-            <button  
-                id="cancelImport"  
-                class="dialog-cancel">  
-                Cancelar  
-            </button>  
-
-            <button  
-                id="confirmImport"  
-                class="dialog-confirm">  
-                Importar  
-            </button>  
-
-        </div>  
-
-    </div>  
-</div>  
-  
-  
-<script>  
-  
-/* =====================================================  
-   DATOS  
 ===================================================== */  
   
 function safeReadProjects(){
@@ -7181,6 +7027,7 @@ codeEditor.addEventListener(
         )  
             return;  
 
+        lastEditorInputAt = Date.now();
   
         updateLineCounter();
 
@@ -7195,6 +7042,12 @@ codeEditor.addEventListener(
         }, hlDelay);
 
         syncEditorToProject();
+        const statusEl = document.getElementById("editorSaveStatus");
+        if (statusEl) {
+            statusEl.textContent = "● Guardando...";
+            statusEl.style.color = "var(--orange)";
+        }
+
         clearTimeout(editorSyncTimer);
         const saveDelay = codeEditor.value.length > LARGE_FILE_THRESHOLD ? 700 : 150;
         editorSyncTimer = setTimeout(() => {
@@ -7251,7 +7104,6 @@ codeEditor.addEventListener("keydown", (e) => {
         if (indentMatch) {
             e.preventDefault();
             const indent = indentMatch[0];
-            const extraIndent = currentLine.trim().endsWith("{") || currentLine.trim().endsWith("(") || currentLine.trim().endsWith("<") ? "    " : "";
             const totalIndent = "\n" + indent + extraIndent;
 
             codeEditor.value = val.substring(0, start) + totalIndent + val.substring(codeEditor.selectionEnd);
@@ -7266,12 +7118,21 @@ codeEditor.addEventListener("scroll", () => {
     if (gutter) gutter.scrollTop = codeEditor.scrollTop;
 
     const highlightPre = document.getElementById("editorHighlight");
-    if (highlightPre) {
-        highlightPre.scrollTop = codeEditor.scrollTop;
-        highlightPre.scrollLeft = codeEditor.scrollLeft;
+function autoSaveProjectState(){
+    try {
+        const editorSize = codeEditor && !codeEditor.disabled ? codeEditor.value.length : 0;
+        if (editorSize > LARGE_FILE_THRESHOLD) {
+            if (Date.now() - lastEditorInputAt >= 3000 && typeof saveCurrentFile === "function") saveCurrentFile();
+            return;
+        }
+        if (typeof saveCurrentFile === "function") saveCurrentFile();
+        if (typeof saveProjects === "function") saveProjects();
+    } catch (error) {
+        console.warn("autoSaveProjectState falló:", error);
     }
-});
+}
 
+setInterval(autoSaveProjectState, 15000);
   
   
 /* =====================================================  
@@ -7334,21 +7195,6 @@ function deleteFile(filename){
     if(!project)  
         return;  
   
-    showCustomDialog({ 
-        title: "Eliminar archivo", 
-        description: `¿Seguro que deseas eliminar el archivo "${filename}"? Esta acción no se puede deshacer.`, 
-        confirmText: "Eliminar", 
-        isDanger: true, 
-        onConfirm: () => { 
-            delete project.files[filename];  
-            deleteLargeFileFromStorage(project.id, filename).catch(() => {});
-  
-            if(  
-                currentFileName === filename  
-            ){  
-  
-                const remaining =  
-                    Object.keys(project.files);  
   
                 if(remaining.length > 0){  
   
@@ -7828,84 +7674,84 @@ function saveProjectDialog(){
         saveCurrentFile();  
   
   
+        const isOSName = /so|os|system|sistema|kernel|boot/i.test(name);
+        const defaultProjectFiles = isOSName ? {
+            "boot.asm": `[BITS 16]
+[ORG 0x7C00]
+
+start:
+    cli
+    mov ax, 0x07C0
+    mov ds, ax
+    mov es, ax
+    mov ss, ax
+    mov sp, 0x7C00
+
+    mov ah, 0x0E
+    mov al, 'M'
+    int 0x10
+    mov al, 'i'
+    int 0x10
+    mov al, 'w'
+    int 0x10
+    mov al, 'y'
+    int 0x10
+    mov al, 'O'
+    int 0x10
+    mov al, 'S'
+    int 0x10
+    mov al, ' '
+    int 0x10
+    mov al, 'v'
+    int 0x10
+    mov al, '1'
+    int 0x10
+
+hang:
+    jmp hang
+
+times 510-($-$$) db 0
+dw 0xAA55
+`,
+            "kernel.c": `/* Kernel de Sistema Operativo x86 */
+#include "display.h"
+
+void kernel_main() {
+    clear_screen();
+    print_string("Miwy Kernel x86 Inicializado Correctamente!\n", 0x0F);
+    draw_vga_banner();
+}
+`,
+            "display.c": `/* Controlador de Pantalla VGA (Text Mode 0xB8000 & Graphics 0xA0000) */
+#include "display.h"
+
+void clear_screen() {
+    volatile char* vga = (volatile char*)0xB8000;
+    for (int i = 0; i < 80 * 25 * 2; i += 2) {
+        vga[i] = ' ';
+        vga[i + 1] = 0x07;
+    }
+}
+
+void print_string(const char* str, char color) {
+    volatile char* vga = (volatile char*)0xB8000;
+    while (*str) {
+        *vga++ = *str++;
+        *vga++ = color;
+    }
+}
+
+void draw_vga_banner() {
+    unsigned char* gfx = (unsigned char*)0xA0000;
+    for (int y = 0; y < 200; y++) {
+        for (int x = 0; x < 320; x++) {
+            gfx[y * 320 + x] = (x + y) % 256;
+        }
+    }
+}
+`,
+            "linker.ld": `ENTRY(start)
         const defaultProjectFiles = {
-            "index.html": `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>${name}</title>
-</head>
-<body>
-    <h1>🚀 ${name}</h1>
-    <p>Proyecto iniciado en Miwy IDE.</p>
-</body>
-</html>`
-        };
-
-        const project = {
-            id: Date.now().toString(),
-            name: name,
-            files: defaultProjectFiles,
-            versions: [],
-            version: 0,
-            messages: [],
-            repository: null,
-            edited: false
-        };  
-  
-  
-        projects.push(project);  
-  
-        currentProjectId =  
-            project.id;  
-  
-        currentFileName = null;  
-  
-        saveProjects();  
-  
-        loadProject();  
-  
-        closeProjectMenu(); 
-
-        openProjectFromGallery(project.id);
- 
-    }else{  
-  
-        const project =  
-            projects.find(  
-                p => p.id === projectEditingId  
-            );  
-  
-  
-        if(project){  
-  
-            project.name =  
-                name;  
-  
-            saveProjects();  
-
-            renderProjects();  
-  
-        }  
-  
-    }  
-  
-  
-    projectDialog.classList.remove(  
-        "open"  
-    );  
-  
-}  
-  
-  
-/* =====================================================  
-   ELIMINAR PROYECTO  
-===================================================== */  
-  
-function deleteProject(id){  
-    const project = projects.find(p => p.id === id);  
-    if(!project) return;  
-  
     showCustomDialog({ 
         title: "Eliminar proyecto", 
         description: `¿Eliminar el proyecto "${project.name}"? Esta acción no se puede deshacer.`, 
@@ -8271,6 +8117,11 @@ const repositorySection =
         "repositorySection"  
     );  
  
+const themeSection =
+    document.getElementById(
+        "themeSection"
+    );
+
   
 document  
     .getElementById("settingsButton")  
@@ -8316,6 +8167,11 @@ function showSettingsMain(){
         saveDevSection.classList.remove("active");
     }
  
+    if (themeSection) {
+        themeSection.classList.remove(
+            "active"
+        );
+    }
 
     const visSection = document.getElementById("visualEditorSection");
     if (visSection) {
@@ -8338,11 +8194,6 @@ function exitToGallery() {
     const visualEditBtn = document.getElementById("visualEditBtn");
 
     isVisualEditing = false;
-    if (visualDock) {
-        visualDock.style.display = "none";
-        visualDock.setAttribute("aria-hidden", "true");
-    }
-    if (visualEditBtn) visualEditBtn.classList.remove("active");
 
     if (settingsOverlay) settingsOverlay.classList.remove("open");
     if (workspace) workspace.style.display = "none";
@@ -8388,8 +8239,15 @@ document
   
         }  
     );  
-  
-  
+    saveCurrentFile();
+    if (editorSize <= LARGE_FILE_THRESHOLD) saveProjects();
+    const current = getCurrentProject();
+    if (current) {
+        if (typeof showTopNotification === "function") {
+            showTopNotification(`💾 Guardado automático: "${current.name}" guardado`, null, 3000);
+        }
+    }
+}, 15 * 60 * 1000);
 
 function runProjectDiagnostics() {
     const project = typeof getCurrentProject === "function" ? getCurrentProject() : null;
@@ -8455,18 +8313,6 @@ function runProjectDiagnostics() {
                         line: lineNum,
                         type: "warning",
                         message: `[Dependencia Faltante] Archivo o recurso referenciado '${srcPath}' no existe en el proyecto`
-                    });
-                }
-            }
-
-            const hrefRegex = /<link\b[^>]*href=["']([^"']+)["']/gi;
-            while ((match = hrefRegex.exec(content)) !== null) {
-                const hrefPath = match[1].replace(/^\.\//, "");
-                if (!/^(https?:|data:|\/\/|#)/i.test(hrefPath) && !existingFileSet.has(hrefPath)) {
-                    const lineNum = content.substring(0, match.index).split("\n").length;
-                    allIssues.push({
-                        file: filename,
-                        line: lineNum,
                         type: "warning",
                         message: `[Estilo Faltante] Archivo CSS '${hrefPath}' referenciado no existe en el proyecto`
                     });
@@ -8474,6 +8320,37 @@ function runProjectDiagnostics() {
             }
         }
 
+        // 3. Análisis y Linter de Ensamblador Assembly (.asm)
+        if (fileType === "asm") {
+            const lines = content.split("\n");
+            lines.forEach((line, idx) => {
+                const lineNum = idx + 1;
+                const cleanLine = line.split(";")[0].trim();
+                if (!cleanLine) return;
+
+                // Validar comillas o apóstrofes sin cerrar
+                const doubleQuotes = (cleanLine.match(/"/g) || []).length;
+                const singleQuotes = (cleanLine.match(/'/g) || []).length;
+                if (doubleQuotes % 2 !== 0 || singleQuotes % 2 !== 0) {
+                    allIssues.push({
+                        file: filename,
+                        line: lineNum,
+                        type: "error",
+                        message: `[Sintaxis Assembly] Cadena de texto o comilla sin cerrar`
+                    });
+                }
+            });
+
+            // Verificar firma de arranque 0x55AA si es un bootsector
+            if (filename.includes("boot") && !content.includes("0xAA55") && !content.includes("0xaa55") && !content.includes("55aa")) {
+                allIssues.push({
+                    file: filename,
+                    line: lines.length,
+                    type: "warning",
+                    message: `[Bootsector ASM] Advertencia: Falta la firma de arranque estándar dw 0xAA55 al final`
+                });
+            }
+        }
 
         // 4. Análisis y Linter de C (.c)
         if (fileType === "c") {
@@ -8520,37 +8397,6 @@ function runProjectDiagnostics() {
         if (fileType === "css") {
             const openBraces = (content.match(/\{/g) || []).length;
             const closeBraces = (content.match(/\}/g) || []).length;
-            if (openBraces !== closeBraces) {
-                allIssues.push({
-                    file: filename,
-                    line: 1,
-                    type: "error",
-                    message: `[Sintaxis CSS] Desbalance de llaves '{' (${openBraces}) y '}' (${closeBraces})`
-                });
-            }
-        }
-    });
-
-    // Actualizar badge del botón de diagnósticos
-    const badge = document.getElementById("diagnosticsBadge");
-    if (badge) {
-        if (allIssues.length > 0) {
-            badge.textContent = allIssues.length;
-            badge.style.display = "inline-block";
-        } else {
-            badge.style.display = "none";
-        }
-    }
-
-    // Mostrar panel modal de resultados de diagnóstico
-    if (allIssues.length === 0) {
-        showCustomDialog({
-            title: "🔍 Diagnóstico Completo del Proyecto",
-            description: "✨ ¡Excelente! El análisis analizó todos los archivos del proyecto y no encontró errores ni dependencias faltantes.",
-            confirmText: "Aceptar",
-            cancelText: null
-        });
-    } else {
         const issuesSummary = allIssues.slice(0, 10).map(i => `• [${i.file} - Línea ${i.line}]: ${i.message}`).join("\n");
         const extraMsg = allIssues.length > 10 ? `\n...y ${allIssues.length - 10} problemas más.` : "";
 
@@ -8576,6 +8422,27 @@ function lintAndFixCurrentCode() {
  
  
 /* =====================================================  
+   TEMAS DE INTERFAZ (LOGIC)
+===================================================== */
+function applyTheme(themeName) {
+    const validThemes = ["oscuro", "claro", "cobalto", "monokai"];
+    if (!validThemes.includes(themeName)) themeName = "oscuro";
+    document.body.classList.remove("theme-oscuro", "theme-claro", "theme-cobalto", "theme-monokai");
+    document.body.classList.add("theme-" + themeName);
+    localStorage.setItem("miwy_theme", themeName);
+    document.querySelectorAll(".theme-option-btn").forEach(btn => {
+        if (btn.getAttribute("data-theme") === themeName) {
+            btn.classList.add("active");
+            btn.style.borderColor = "var(--orange)";
+        } else {
+            btn.classList.remove("active");
+            btn.style.borderColor = "";
+        }
+    });
+}
+
+const exportProjSettingsBtn = document.getElementById("exportProjectSettingsBtn");
+const exportDialog = document.getElementById("exportDialog");
 const cancelExportBtn = document.getElementById("cancelExport");
 const confirmExportBtn = document.getElementById("confirmExport");
 
@@ -8632,27 +8499,6 @@ function closeImportDialog() {
 
 if (importProjectBtn) {
     importProjectBtn.addEventListener("click", openImportDialog);
-}
-
-if (panelImportBtn) {
-    panelImportBtn.addEventListener("click", openImportDialog);
-}
-
-if (cancelImportBtn && importDialog) {
-    cancelImportBtn.addEventListener("click", closeImportDialog);
-}
-
-if (confirmImportBtn && importProjectInput) {
-    confirmImportBtn.addEventListener("click", () => {
-        closeImportDialog();
-        importProjectInput.click();
-    });
-}
-
-if (importProjectInput) { 
-    importProjectInput.addEventListener("change", async (event) => { 
-        const files = Array.from(event.target.files); 
-        if (!files || files.length === 0) return; 
 
         const importedFiles = {}; 
         let projName = "Proyecto Importado";
@@ -8764,6 +8610,22 @@ if (importProjectInput) {
     }); 
 } 
 
+document.querySelectorAll(".theme-option-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const selected = btn.getAttribute("data-theme");
+        applyTheme(selected);
+    });
+});
+
+const themeBtn = document.getElementById("themeButton");
+if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+        settingsMain.style.display = "none";
+        themeSection.classList.add("active");
+    });
+}
+
+applyTheme(localStorage.getItem("miwy_theme") || "oscuro");
 
 document.querySelectorAll("[data-back]").forEach(button => { 
     button.addEventListener("click", showSettingsMain); 
@@ -8825,22 +8687,6 @@ const settingsExportBtn = document.getElementById("exportZipBtn");
 if (settingsExportBtn) { 
     settingsExportBtn.addEventListener("click", () => { 
         const current = getCurrentProject(); 
-        if (current) { 
-            exportProjectAsZip(current.id); 
-            // close settings overlay 
-            const settingsOverlay = document.getElementById("settingsOverlay"); 
-            if(settingsOverlay) settingsOverlay.classList.remove("open"); 
-        } 
-    }); 
-} 
- 
- 
-/* =====================================================  
-   SOPORTE PARA CONECTAR UN REPOSITORIO (DESHABILITADO)
-===================================================== */  
-const connectRepoBtn = document.getElementById("connectRepository");
-if (connectRepoBtn) {
-    connectRepoBtn.addEventListener("click", (e) => {  
         e.preventDefault();
         showCustomDialog({ title: "Información", description: "Se integrará pronto" });  
     });
@@ -8929,6 +8775,28 @@ document.addEventListener("touchcancel", stopWorkspaceResize);
   
   
 /* =====================================================  
+   VISTA MÓVIL / LAPTOP
+===================================================== */
+
+const desktopPreview = document.getElementById("desktopPreview");
+const mobilePreview = document.getElementById("mobilePreview");
+
+if (desktopPreview) {
+    desktopPreview.addEventListener("click", () => {
+        previewFrame.className = "preview-frame";
+        desktopPreview.classList.add("active");
+        if (mobilePreview) mobilePreview.classList.remove("active");
+    });
+}
+
+if (mobilePreview) {
+    mobilePreview.addEventListener("click", () => {
+        previewFrame.className = "preview-frame mobile";
+        mobilePreview.classList.add("active");
+        if (desktopPreview) desktopPreview.classList.remove("active");
+    });
+}
+
   
 /* =====================================================  
    COPIAR CÓDIGO  
@@ -8984,21 +8852,14 @@ window.addEventListener("keydown", function(event) {
     if (isCtrl && key === 's') { 
         event.preventDefault(); 
         saveCurrentFile(); 
-        updatePreview(); 
-        showShortcutToast("Ctrl + S", "Archivo guardado"); 
-    } 
- 
- 
-    // Ctrl + E: Exportar ZIP 
-    if (isCtrl && key === 'e') { 
-        event.preventDefault(); 
-        const current = getCurrentProject(); 
-        if (current) { 
-            exportProjectAsZip(current.id); 
-            showShortcutToast("Ctrl + E", "Exportando proyecto como ZIP"); 
+                desktopBtn.click();
+                showShortcutToast("Ctrl + P", "Vista laptop activada");
+            } else {
+                mobileBtn.click();
+                showShortcutToast("Ctrl + P", "Vista teléfono activada");
+            }
         } 
     } 
- 
  
     // Ctrl + F: Buscar y Reemplazar
     if (isCtrl && key === 'f') {
@@ -9061,21 +8922,6 @@ if (realPhoneReload && realPhoneFrame && previewFrame) {
     });
 }
 
-function openRealPhoneModal() {
-    const modal = document.getElementById("realPhoneModal");
-    const pFrame = document.getElementById("previewFrame");
-    const rFrame = document.getElementById("realPhoneFrame");
-    if (pFrame && rFrame) {
-        rFrame.srcdoc = pFrame.srcdoc;
-    }
-    if (modal) {
-        modal.classList.add("open");
-    }
-}
-
-function closeRealPhoneModal() {
-    const modal = document.getElementById("realPhoneModal");
-    if (modal) {
         modal.classList.remove("open");
     }
 }
