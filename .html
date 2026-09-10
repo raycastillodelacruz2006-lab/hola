@@ -1689,17 +1689,43 @@ button:not(.miwy-tb-btn):not(.new-file-button):not(.miwy-create-project):not(.cr
 }
 
 .miwy-floating-dock.dock-fixed-top {
-    top: 7px;
+    top: 8px;
     bottom: auto;
     left: 175px;
-    right: 60px;
+    right: 58px;
     transform: none;
-    width: calc(100vw - 235px);
+    width: auto;
     max-width: none;
-    border-radius: 12px;
-    padding: 4px 10px;
-    background: rgba(13, 19, 25, 0.98);
-    border: 1px solid #2d9eae;
+    border-radius: 10px;
+    padding: 3px 10px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-dock-drag-handle {
+    display: none !important;
+}
+
+.miwy-floating-dock.dock-vertical {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 10px 6px !important;
+    border-radius: 20px !important;
+}
+
+.miwy-floating-dock.dock-vertical .miwy-dock-group {
+    flex-direction: column !important;
+    border-right: none !important;
+    border-bottom: 1px solid #2a2a2a !important;
+    padding-right: 0 !important;
+    padding-bottom: 8px !important;
+}
+
+.miwy-floating-dock.dock-vertical .miwy-dock-group:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
 }
 .miwy-dock-group {
     display: flex;
@@ -2756,19 +2782,23 @@ function updateDockSettingsUI() {
         if (orient === "horizontal") {
             horizBtn.style.border = "1px solid var(--orange)";
             horizBtn.style.color = "var(--orange)";
-            vertBtn.style.border = "";
-            vertBtn.style.color = "";
+            vertBtn.style.border = "1px solid rgba(255,255,255,0.08)";
+            vertBtn.style.color = "#cbd5e1";
         } else {
             vertBtn.style.border = "1px solid var(--orange)";
             vertBtn.style.color = "var(--orange)";
-            horizBtn.style.border = "";
-            horizBtn.style.color = "";
+            horizBtn.style.border = "1px solid rgba(255,255,255,0.08)";
+            horizBtn.style.color = "#cbd5e1";
         }
     }
 
     const parentDock = document.getElementById("parentVisualDock");
     if (parentDock) {
-        parentDock.classList.remove("vertical");
+        if (posMode === "floating" && orient === "vertical") {
+            parentDock.classList.add("dock-vertical");
+        } else {
+            parentDock.classList.remove("dock-vertical");
+        }
     }
 }
 
@@ -5242,7 +5272,7 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
     class="preview-panel"  
     id="previewPanel">  
   
-    <div class="panel-header">  
+    <div class="panel-header" style="justify-content:space-between;">
   
         <div class="panel-left" style="gap:10px;">
             <div class="panel-name">
@@ -5258,10 +5288,12 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 onclick="toggleVisualEdit()">  
                 Editor Visual  
             </button>  
+        </div>
 
+        <div class="preview-controls" style="gap:6px;">
             <button id="desktopPreview" class="preview-button active" title="Vista Laptop / Escritorio" onclick="setPreviewDeviceMode('desktop')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>Laptop</button>
             <button id="mobilePreview" class="preview-button" title="Vista Teléfono Movil" onclick="setPreviewDeviceMode('mobile')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Teléfono</button>
-        </div>  
+        </div>
   
     </div>  
   
