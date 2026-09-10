@@ -662,20 +662,41 @@ button{border:0;cursor:pointer}
     box-sizing: border-box;
 }  
 
-.preview-frame.mobile{
-    height: calc(100% - 32px);
-    max-height: calc(100% - 32px);
-    width: auto;
-    aspect-ratio: 9 / 18.5;
-    max-width: calc(100% - 32px);
-    margin: 16px;
-    border-radius: 28px;
-    border: 8px solid #1a1a1a;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+
+/* SIZING & CHASSIS PARA TELÉFONO (SAMSUNG 17.16 cm / ~6.7"-6.8", Aspect-Ratio 19.5:9) */
+
+/* SIZING & CHASSIS PARA TELÉFONO (SAMSUNG 17.16 cm / ~6.7"-6.8", Aspect-Ratio 19.5:9) */
+.preview-frame.mobile {
+    width: 375px !important;
+    height: 812px !important;
+    max-width: 92vw;
+    max-height: 88vh;
+    margin: auto;
+    border: 12px solid #1a222a !important;
+    border-radius: 38px !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75), inset 0 0 0 2px #2a3642 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    background: #ffffff;
+}
+.preview-wrapper-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-wrapper-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
-/* =========================  
+
+/* =========================
 
 
 .device-header {
@@ -2864,6 +2885,7 @@ function updatePreviewImmediate(sequence = previewUpdateSequence){
     });
   
     // Si no hay HTML principal pero hay un archivo activo con lenguaje específico, generar runner adecuado
+
     const activeType = currentFileName ? getFileType(currentFileName) : "";
     const activeContent = (currentFileName && files[currentFileName]) ? files[currentFileName] : "";
 
@@ -2986,7 +3008,39 @@ builtins.input = custom_input
     }
     runPythonScript();
   <\/script>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`;
         } else if (activeType === "js" || activeType === "ts") {
             const escapedJS = JSON.stringify(activeContent);
@@ -3087,7 +3141,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
       }
     })();
   <\/script>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`;
         } else if (activeType === "markdown") {
             const escapedMd = JSON.stringify(activeContent);
@@ -3169,7 +3255,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
       document.getElementById("content").textContent = md;
     }
   <\/script>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`;
         } else if (activeType === "svg") {
             html = `<!DOCTYPE html>
@@ -3235,7 +3353,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 </head>
 <body>
   <div class="svg-box">${activeContent}</div>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`;
         } else {
             // Runner / Terminal interactivo genérico para otros lenguajes (C, C++, Java, Rust, Go, C#, PHP, NASM, Bash, etc.)
@@ -3364,7 +3514,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
       term.scrollTop = term.scrollHeight;
     }
   <\/script>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`;
         }
     }
@@ -3460,7 +3642,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
         <h1>🚀 Tu app o web se reflejará aquí</h1>
         <p>Crea o edita tus archivos en cualquier lenguaje para ver la ejecución en tiempo real.</p>
     </div>
-</body>  
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
+</body>
+
 </html>  
 `;  
     }  
@@ -3500,8 +3714,104 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
         html = style + html;  
     }  
 
-    if(html.includes("</body>")){  
-        html = html.replace("</body>", script + "</body>");  
+    if(html.includes("
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
+</body>
+")){
+        html = html.replace("
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
+</body>
+", script + "
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
+</body>
+");
     } else {  
         html += script;  
     }  
@@ -6365,7 +6675,26 @@ function closeCustomDialog() {
     document.getElementById("customDialog").classList.remove("open"); 
 } 
  
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    const desktopPreviewBtn = document.getElementById("desktopPreview");
+    const mobilePreviewBtn = document.getElementById("mobilePreview");
+    const previewFrameEl = document.getElementById("previewFrame");
+
+    if (desktopPreviewBtn && mobilePreviewBtn && previewFrameEl) {
+        desktopPreviewBtn.addEventListener("click", () => {
+            desktopPreviewBtn.classList.add("active");
+            mobilePreviewBtn.classList.remove("active");
+            previewFrameEl.classList.remove("mobile");
+        });
+        mobilePreviewBtn.addEventListener("click", () => {
+            mobilePreviewBtn.classList.add("active");
+            desktopPreviewBtn.classList.remove("active");
+            previewFrameEl.classList.add("mobile");
+        });
+    }
+
     const confirmBtn = document.getElementById("customDialogConfirm"); 
     const cancelBtn = document.getElementById("customDialogCancel"); 
     const inputEl = document.getElementById("customDialogInput"); 
@@ -8257,7 +8586,39 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 <body>
     <h1>🚀 ${name}</h1>
     <p>Proyecto iniciado en Miwy IDE.</p>
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
 </body>
+
 </html>`
         };
 
@@ -9550,6 +9911,39 @@ function reloadRealPhoneFrame() {
   
 
 <script>
+
+/* CONTROLES RESPONSIVE: LAPTOP / TELÉFONO */
+(function setupResponsiveControls() {
+    function bindControls() {
+        const desktopBtn = document.getElementById("desktopPreview");
+        const mobileBtn = document.getElementById("mobilePreview");
+        const previewFrame = document.getElementById("previewFrame");
+
+        if (desktopBtn && mobileBtn && previewFrame) {
+            desktopBtn.onclick = function(e) {
+                if (e) e.preventDefault();
+                desktopBtn.classList.add("active");
+                mobileBtn.classList.remove("active");
+                previewFrame.classList.remove("mobile");
+            };
+
+            mobileBtn.onclick = function(e) {
+                if (e) e.preventDefault();
+                mobileBtn.classList.add("active");
+                desktopBtn.classList.remove("active");
+                previewFrame.classList.add("mobile");
+            };
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", bindControls);
+    } else {
+        bindControls();
+    }
+})();
+
+
 (function iconizeButtons() {
     const emojiPattern = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu;
     document.querySelectorAll("button").forEach(button => {
@@ -9572,5 +9966,37 @@ function reloadRealPhoneFrame() {
 })();
 </script>
 
-</body>  
+
+<script>
+/* =====================================================
+   CONTROLES RESPONSIVE: LAPTOP / TELÉFONO
+===================================================== */
+function initResponsiveControls() {
+    const desktopBtn = document.getElementById("desktopPreview");
+    const mobileBtn = document.getElementById("mobilePreview");
+    const previewFrame = document.getElementById("previewFrame");
+
+    if (desktopBtn && mobileBtn && previewFrame) {
+        desktopBtn.onclick = function() {
+            desktopBtn.classList.add("active");
+            mobileBtn.classList.remove("active");
+            previewFrame.classList.remove("mobile");
+        };
+
+        mobileBtn.onclick = function() {
+            mobileBtn.classList.add("active");
+            desktopBtn.classList.remove("active");
+            previewFrame.classList.add("mobile");
+        };
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initResponsiveControls);
+} else {
+    initResponsiveControls();
+}
+</script>
+</body>
+
 </html>
