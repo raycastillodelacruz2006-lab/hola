@@ -2461,6 +2461,32 @@ button {
     .miwy-project-card, .dialog, .settings-panel { box-shadow: 0 6px 16px rgba(0,0,0,.4) !important; }
 }
 
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
 </style>  
 <script>
 /* =====================================================  
@@ -2855,8 +2881,60 @@ function updatePreviewImmediate(sequence = previewUpdateSequence){
   .term-out { background: #080c10; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; min-height: 120px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; color: #f1f5f9; overflow: auto; margin-bottom: 15px; }
   .status { color: #ff6a00; font-weight: bold; }
   #app-canvas { background: #131b24; border: 1px solid #283747; border-radius: 10px; padding: 20px; min-height: 200px; margin-top: 10px; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"><\/script>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+</style>
 </head>
 <body>
   <div class="term-header">
@@ -2921,6 +2999,58 @@ builtins.input = custom_input
   body { background: #0c1015; color: #f7df1e; font-family: Consolas, monospace; padding: 20px; margin: 0; }
   .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 15px; font-size: 13px; color: #94a3b8; }
   .console-out { background: #06090c; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; min-height: 300px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; color: #f8fafc; overflow: auto; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+</style>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
 </style>
 </head>
 <body>
@@ -2974,8 +3104,60 @@ builtins.input = custom_input
   pre code { background: transparent; padding: 0; }
   a { color: #58a6ff; text-decoration: none; }
   a:hover { text-decoration: underline; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"><\/script>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+</style>
 </head>
 <body>
   <div id="content" class="markdown-body">Cargando Markdown...</div>
@@ -2997,6 +3179,58 @@ builtins.input = custom_input
   body { background: #090d12; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
   .svg-box { max-width: 90vw; max-height: 90vh; background: #111822; padding: 20px; border-radius: 12px; border: 1px solid #233242; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
   svg { max-width: 100%; height: auto; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+</style>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
 </style>
 </head>
 <body>
@@ -3019,6 +3253,58 @@ builtins.input = custom_input
   .stdin-row { display: flex; gap: 8px; margin-top: 12px; }
   .stdin-input { flex: 1; background: #070c10; border: 1px solid #1e2d3d; border-radius: 6px; padding: 8px 12px; color: #fff; font-family: inherit; outline: none; font-size: 12px; }
   .stdin-btn { background: #ff6a00; color: #000; border: none; border-radius: 6px; padding: 0 16px; font-weight: bold; cursor: pointer; font-size: 12px; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+</style>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
 </style>
 </head>
 <body>
@@ -3115,6 +3401,58 @@ builtins.input = custom_input
     }
     h1 { margin-top: 0; color: #ff6a00; font-size: 24px; }
     p { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+</style>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
 </style>
 </head>  
 <body>  
@@ -3127,10 +3465,36 @@ builtins.input = custom_input
 `;  
     }  
   
-    const style = `<style>${css}</style>`;  
+    const style = `<style>${css}
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+</style>`;
     const script = `<script>\n${js}\n<\/script>`;  
   
-    if(html.includes("</head>")){  
+    if(html.includes("</head>")) {
         html = html.replace("</head>", style + "</head>");  
     } else {  
         html = style + html;  
@@ -4515,7 +4879,7 @@ function replaceAllMatches() {
 
     performCodeSearch();
     if (typeof showTopNotification === "function") {
-        showTopNotification(`✏️ Se reemplazaron ${totalReplaced} coincidencias`, null, 2500);
+        showTopNotification(`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 22 22 22 12 2"></polygon><path d="M12 10l3 5h-6z"></path></svg> Se reemplazaron ${totalReplaced} coincidencias`, null, 2500);
     }
 }
 
@@ -4889,6 +5253,32 @@ function replaceAllMatches() {
 
 
 </script>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+</style>
 </head>  
   
   
@@ -5034,7 +5424,7 @@ function replaceAllMatches() {
                             <input id="codeSearchInput" type="text" placeholder="Buscar en código..." style="flex:1; height:26px; background:#141414; border:1px solid #333; border-radius:4px; color:#fff; padding:0 8px; font-size:11px; outline:none;">
                         </div>
                         <div style="display:flex; align-items:center; gap:5px; flex:1; min-width:180px;">
-                            <span style="font-size:11px; color:#aaa;">✏️</span>
+                            <span style="font-size:11px; color:#aaa;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 22 22 22 12 2"></polygon><path d="M12 10l3 5h-6z"></path></svg></span>
                             <input id="codeReplaceInput" type="text" placeholder="Reemplazar con..." style="flex:1; height:26px; background:#141414; border:1px solid #333; border-radius:4px; color:#fff; padding:0 8px; font-size:11px; outline:none;">
                         </div>
                         <div style="display:flex; align-items:center; gap:4px;">
@@ -5145,6 +5535,9 @@ function replaceAllMatches() {
   
         <div class="preview-controls">  
   
+            <button id="desktopPreview" class="preview-button active" title="Vista Laptop / Escritorio"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>Laptop</button>
+            <button id="mobilePreview" class="preview-button" title="Vista Teléfono Movil"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Teléfono</button>
+
             <span class="panel-name">  
                 <span style="color:#42d66b;">●</span>  
                 Live  
@@ -5231,7 +5624,7 @@ function replaceAllMatches() {
             <label style="display:flex; align-items:center; gap:10px; background:#181818; padding:10px 12px; border-radius:8px; border:1px solid #333;">
                 <input type="radio" name="exportFormat" value="zip" checked style="accent-color:var(--orange);">
                 <div>
-                    <strong style="font-size:12px; color:#fff; display:block;">📦 Archivo ZIP (.zip)</strong>
+                    <strong style="font-size:12px; color:#fff; display:block;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="10" x2="12" y2="16"></line><polyline points="9 13 12 16 15 13"></polyline></svg> Archivo ZIP (.zip)</strong>
                     <small style="font-size:10px; color:#aaa;">Código fuente completo del proyecto</small>
                 </div>
             </label>
@@ -6661,7 +7054,7 @@ function getFileIcon(filename){
     if (type === "image") return `🖼️`;  
     if (type === "audio") return `🎵`;  
     if (type === "video") return `🎬`;  
-    if (type === "archive") return `📦`;  
+    if (type === "archive") return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="10" x2="12" y2="16"></line><polyline points="9 13 12 16 15 13"></polyline></svg>`;
   
     return `📄`;  
 }  
@@ -6945,7 +7338,7 @@ function renameMediaFilePrompt(oldFilename, currentDisplayName) {
             renderFiles();
             renderFolderManager(currentFolderDirectory);
             updatePreview();
-            showTopNotification(`✏️ Archivo renombrado a "${cleanNewName}"`, null, 2200);
+            showTopNotification(`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 22 22 22 12 2"></polygon><path d="M12 10l3 5h-6z"></path></svg> Archivo renombrado a "${cleanNewName}"`, null, 2200);
         }
     });
 }
@@ -7834,6 +8227,32 @@ function saveProjectDialog(){
 <head>
 <meta charset="UTF-8">
 <title>${name}</title>
+<style>
+/* TEMAS: CLARO Y OSCURO */
+body.theme-claro {
+    --bg-dark: #f8fafc;
+    --bg-panel: #ffffff;
+    --bg-card: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --editor-bg: #ffffff;
+    --header-bg: #f1f5f9;
+    color: #0f172a;
+}
+body.theme-claro .workspace,
+body.theme-claro .code-panel,
+body.theme-claro .preview-panel,
+body.theme-claro .panel-header,
+body.theme-claro .miwy-gallery {
+    background: #f8fafc;
+    color: #0f172a;
+}
+body.theme-claro .file-tree, body.theme-claro .editor-container {
+    background: #ffffff;
+    color: #0f172a;
+}
+</style>
 </head>
 <body>
     <h1>🚀 ${name}</h1>
@@ -8335,7 +8754,9 @@ function exitToGallery() {
     const settingsBtn = document.getElementById("settingsButton");
     const brandTitle = document.getElementById("galleryBrandTitle");
     const visualDock = document.getElementById("parentVisualDock");
-    const visualEditBtn = document.getElementById("visualEditBtn");
+
+
+const visualEditBtn = document.getElementById("visualEditBtn");
 
     isVisualEditing = false;
     if (visualDock) {
