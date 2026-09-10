@@ -3661,14 +3661,19 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
             var handleResizeStart = function(clientX, clientY) {
                 var startX = clientX, startY = clientY;
                 var startW = selectedTarget.offsetWidth, startH = selectedTarget.offsetHeight;
+                var rafId = null;
 
                 var doResize = function(me) {
-                    var cx = me.clientX !== undefined ? me.clientX : (me.touches && me.touches[0] ? me.touches[0].clientX : startX);
-                    var cy = me.clientY !== undefined ? me.clientY : (me.touches && me.touches[0] ? me.touches[0].clientY : startY);
-                    selectedTarget.style.width = Math.max(20, startW + (cx - startX)) + 'px';
-                    selectedTarget.style.height = Math.max(20, startH + (cy - startY)) + 'px';
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(function() {
+                        var cx = me.clientX !== undefined ? me.clientX : (me.touches && me.touches[0] ? me.touches[0].clientX : startX);
+                        var cy = me.clientY !== undefined ? me.clientY : (me.touches && me.touches[0] ? me.touches[0].clientY : startY);
+                        selectedTarget.style.width = Math.max(20, startW + (cx - startX)) + 'px';
+                        selectedTarget.style.height = Math.max(20, startH + (cy - startY)) + 'px';
+                    });
                 };
                 var stopResize = function() {
+                    if (rafId) cancelAnimationFrame(rafId);
                     window.removeEventListener('mousemove', doResize);
                     window.removeEventListener('mouseup', stopResize);
                     window.removeEventListener('touchmove', doResize);
@@ -3706,17 +3711,22 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 var startX = clientX, startY = clientY;
                 var startLeft = parseFloat(selectedTarget.style.left) || 0;
                 var startTop = parseFloat(selectedTarget.style.top) || 0;
+                var elemRafId = null;
 
                 var doElemMove = function(me) {
                     if (!draggingElem) return;
-                    var cx = me.clientX !== undefined ? me.clientX : (me.touches && me.touches[0] ? me.touches[0].clientX : startX);
-                    var cy = me.clientY !== undefined ? me.clientY : (me.touches && me.touches[0] ? me.touches[0].clientY : startY);
-                    selectedTarget.style.left = (startLeft + (cx - startX)) + 'px';
-                    selectedTarget.style.top = (startTop + (cy - startY)) + 'px';
+                    if (elemRafId) cancelAnimationFrame(elemRafId);
+                    elemRafId = requestAnimationFrame(function() {
+                        var cx = me.clientX !== undefined ? me.clientX : (me.touches && me.touches[0] ? me.touches[0].clientX : startX);
+                        var cy = me.clientY !== undefined ? me.clientY : (me.touches && me.touches[0] ? me.touches[0].clientY : startY);
+                        selectedTarget.style.left = (startLeft + (cx - startX)) + 'px';
+                        selectedTarget.style.top = (startTop + (cy - startY)) + 'px';
+                    });
                 };
 
                 var stopElemMove = function() {
                     draggingElem = false;
+                    if (elemRafId) cancelAnimationFrame(elemRafId);
                     window.removeEventListener('mousemove', doElemMove);
                     window.removeEventListener('mouseup', stopElemMove);
                     window.removeEventListener('touchmove', doElemMove);
@@ -3883,32 +3893,39 @@ document.addEventListener("DOMContentLoaded", function() {
             parentDock.style.right = "auto";
         };
 
+        let dockRafId = null;
+
         var moveDockDrag = function(clientX, clientY) {
             if (!draggingParentDock) return;
-            const dockWidth = parentDock.offsetWidth || 300;
-            const dockHeight = parentDock.offsetHeight || 50;
+            if (dockRafId) cancelAnimationFrame(dockRafId);
+            dockRafId = requestAnimationFrame(() => {
+                const dockWidth = parentDock.offsetWidth || 300;
+                const dockHeight = parentDock.offsetHeight || 50;
 
-            const maxX = Math.max(10, window.innerWidth - dockWidth - 10);
-            const maxY = Math.max(10, window.innerHeight - dockHeight - 10);
+                const maxX = Math.max(10, window.innerWidth - dockWidth - 10);
+                const maxY = Math.max(10, window.innerHeight - dockHeight - 10);
 
-            let rawX = clientX - pOffsetX;
-            let rawY = clientY - pOffsetY;
+                let rawX = clientX - pOffsetX;
+                let rawY = clientY - pOffsetY;
 
-            // Constrain within screen bounds
-            let clampedX = Math.max(10, Math.min(rawX, maxX));
-            let clampedY = Math.max(10, Math.min(rawY, maxY));
+                let clampedX = Math.max(10, Math.min(rawX, maxX));
+                let clampedY = Math.max(10, Math.min(rawY, maxY));
 
-            parentDock.style.left = clampedX + "px";
-            parentDock.style.top = clampedY + "px";
+                parentDock.style.left = clampedX + "px";
+                parentDock.style.top = clampedY + "px";
 
-            savedDockPosition = { x: clampedX, y: clampedY };
-            try {
-                localStorage.setItem("miwy_dock_pos", JSON.stringify(savedDockPosition));
-            } catch (err) { /* ignore */ }
+                savedDockPosition = { x: clampedX, y: clampedY };
+            });
         };
 
         var endDockDrag = function() {
             draggingParentDock = false;
+            if (dockRafId) cancelAnimationFrame(dockRafId);
+            if (savedDockPosition) {
+                try {
+                    localStorage.setItem("miwy_dock_pos", JSON.stringify(savedDockPosition));
+                } catch (err) { /* ignore */ }
+            }
         };
 
         // Mouse events
@@ -4272,45 +4289,49 @@ function toggleCodeSearch(show) {
 }
 
 function performCodeSearch() {
-    const editor = document.getElementById("codeEditor");
-    const searchInput = document.getElementById("codeSearchInput");
-    const countEl = document.getElementById("codeSearchMatchCount");
+    try {
+        const editor = document.getElementById("codeEditor");
+        const searchInput = document.getElementById("codeSearchInput");
+        const countEl = document.getElementById("codeSearchMatchCount");
 
-    if (!editor || !searchInput || !countEl) return;
+        if (!editor || !searchInput || !countEl) return;
 
-    if (editor.value.length > LARGE_FILE_THRESHOLD) {
+        if (editor.value.length > LARGE_FILE_THRESHOLD) {
+            searchMatches = [];
+            currentMatchIndex = -1;
+            countEl.textContent = "Archivo grande";
+            showTopNotification("⚡ La búsqueda completa está desactivada en archivos grandes para evitar bloqueos", null, 3000);
+            return;
+        }
+
+        const query = searchInput.value;
         searchMatches = [];
         currentMatchIndex = -1;
-        countEl.textContent = "Archivo grande";
-        showTopNotification("⚡ La búsqueda completa está desactivada en archivos grandes para evitar bloqueos", null, 3000);
-        return;
+
+        if (!query) {
+            countEl.textContent = "0 / 0";
+            return;
+        }
+
+        const text = editor.value;
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        let index = 0;
+
+        while ((index = lowerText.indexOf(lowerQuery, index)) !== -1) {
+            searchMatches.push(index);
+            index += query.length || 1;
+        }
+
+        if (searchMatches.length > 0) {
+            currentMatchIndex = 0;
+            highlightCurrentMatch();
+        }
+
+        updateMatchCountUI();
+    } catch (err) {
+        console.warn("Error durante la búsqueda de código:", err);
     }
-
-    const query = searchInput.value;
-    searchMatches = [];
-    currentMatchIndex = -1;
-
-    if (!query) {
-        countEl.textContent = "0 / 0";
-        return;
-    }
-
-    const text = editor.value;
-    const lowerText = text.toLowerCase();
-    const lowerQuery = query.toLowerCase();
-    let index = 0;
-
-    while ((index = lowerText.indexOf(lowerQuery, index)) !== -1) {
-        searchMatches.push(index);
-        index += query.length || 1;
-    }
-
-    if (searchMatches.length > 0) {
-        currentMatchIndex = 0;
-        highlightCurrentMatch();
-    }
-
-    updateMatchCountUI();
 }
 
 function updateMatchCountUI() {
@@ -4706,13 +4727,13 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 id="panelCreateProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0;">  
-                Crear proyecto  
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Crear proyecto
             </button>  
             <button  
                 id="panelImportProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0; background: #1a251c; color: var(--green);">  
-                📥 Importar 
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Importar
             </button>  
         </div> 
     </div>
@@ -4913,13 +4934,13 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 id="createProjectButton"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0;">  
-                Crear proyecto  
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Crear proyecto
             </button>  
             <button  
                 id="importProjectBtn"  
                 class="create-project" 
                 style="flex: 1; margin-top: 0; background: #1a251c; color: var(--green);">  
-                📥 Importar 
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Importar
             </button>  
         </div> 
         <input type="file" id="importProjectInput" accept=".zip,.json,.html,.css,.js,.txt,.svg" multiple style="display: none;"> 
@@ -7954,6 +7975,10 @@ document
  
  
 /* =====================================================  
+   EXPORTAR E IMPORTAR PROYECTO HANDLERS
+===================================================== */
+const exportProjSettingsBtn = document.getElementById("exportProjectSettingsBtn");
+const exportDialog = document.getElementById("exportDialog");
 const cancelExportBtn = document.getElementById("cancelExport");
 const confirmExportBtn = document.getElementById("confirmExport");
 
@@ -8397,13 +8422,42 @@ window.addEventListener("keydown", function(event) {
             showShortcutToast("Ctrl + E", "Exportando proyecto como ZIP"); 
         } 
     } 
- 
+
+    // Ctrl + I: Importar Proyecto
+    if (isCtrl && key === 'i') {
+        event.preventDefault();
+        if (typeof openImportDialog === "function") openImportDialog();
+        showShortcutToast("Ctrl + I", "Importar proyecto");
+    }
+
+    // Ctrl + M: Alternar Laptop / Teléfono
+    if (isCtrl && key === 'm') {
+        event.preventDefault();
+        const nextMode = previewDeviceMode === "mobile" ? "desktop" : "mobile";
+        setPreviewDeviceMode(nextMode);
+        showShortcutToast("Ctrl + M", `Modo ${nextMode === "mobile" ? "Teléfono" : "Laptop"}`);
+    }
+
+    // Ctrl + Shift + V: Alternar Editor Visual
+    if (isCtrl && event.shiftKey && key === 'v') {
+        event.preventDefault();
+        toggleVisualEdit();
+    }
  
     // Ctrl + F: Buscar y Reemplazar
     if (isCtrl && key === 'f') {
         event.preventDefault();
         toggleCodeSearch();
         showShortcutToast("Ctrl + F", "Buscador de código");
+    }
+
+    // Escape: Cerrar diálogos / modales abiertos
+    if (event.key === 'Escape') {
+        const openOverlays = document.querySelectorAll(".overlay.open, .settings-overlay.open, .project-overlay.open");
+        if (openOverlays.length > 0) {
+            openOverlays.forEach(el => el.classList.remove("open"));
+            showShortcutToast("Esc", "Cerrar ventana");
+        }
     }
 
     // Ctrl + , (comma): Abrir configuración (Settings) 
