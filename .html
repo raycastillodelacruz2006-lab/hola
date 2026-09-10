@@ -36,7 +36,6 @@ if ('serviceWorker' in navigator) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-nasm.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js" defer></script>
@@ -677,35 +676,6 @@ button{border:0;cursor:pointer}
 
 
 /* =========================  
-   MINI SIMULADOR DE DISPOSITIVOS  
-========================= */  
-.device-simulator {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: #141414;
-    border: 2px solid #282828;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    margin: auto;
-}
-
-.device-simulator.laptop {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-}
-
-.device-simulator.mobile {
-    width: 390px;
-    min-width: 390px;
-    height: 720px;
-    max-height: 100%;
-    border-radius: 36px;
-    border: 8px solid #222;
-    box-shadow: 0 0 0 2px #333, 0 25px 60px rgba(0,0,0,0.8);
-}
 
 
 .device-header {
@@ -1230,8 +1200,6 @@ button.iconized::before{ content:""; display:inline-block; vertical-align:-3px; 
 button.iconized.icon-save::before{ border:1.5px solid currentColor; border-radius:2px; }
 button.iconized.icon-import::before{ border:1.5px solid currentColor; border-radius:2px; clip-path:polygon(0 25%, 38% 25%, 50% 0, 100% 0, 100% 100%, 0 100%); }
 button.iconized.icon-export::before{ border:1.5px solid currentColor; border-radius:2px; clip-path:polygon(0 0, 100% 0, 100% 72%, 62% 72%, 50% 100%, 38% 72%, 0 72%); }
-button.iconized.icon-edit::before{ border:1.5px solid currentColor; border-radius:2px; transform:skew(-15deg); }
-button.iconized.icon-theme::before{ border:1.5px solid currentColor; border-radius:50%; box-shadow:5px -3px 0 -3px #101010, 5px -3px 0 -1.5px currentColor; }
 button.iconized.icon-close::before{ content:"x"; font-size:16px; line-height:13px; }
 button.iconized.icon-arrow::before{ content:">"; font-size:18px; line-height:13px; }
 button.iconized.icon-plus::before{ content:"+"; font-size:18px; line-height:13px; }
@@ -1303,23 +1271,6 @@ button:not(.miwy-tb-btn):not(.settings-button):not(.new-file-button):not(.miwy-c
 .option-icon.icon-option-import::before,
 .option-icon.icon-option-edit::before,
 .option-icon.icon-option-version::before,
-.option-icon.icon-option-save::before,
-.option-icon.icon-option-theme::before,
-.option-icon.icon-option-keyboard::before {
-    content: "";
-    display: block;
-    width: 15px;
-    height: 15px;
-    border: 1.5px solid currentColor;
-    border-radius: 3px;
-}
-.option-icon.icon-option-export::after { content: "↓"; font-size: 15px; position: absolute; }
-.option-icon.icon-option-import::after { content: "↑"; font-size: 15px; position: absolute; }
-.option-icon.icon-option-edit::after { content: "/"; font-size: 17px; transform: rotate(-35deg); position: absolute; }
-.option-icon.icon-option-version::after { content: "↶"; font-size: 17px; position: absolute; }
-.option-icon.icon-option-save::after { content: ""; position: absolute; width: 7px; height: 4px; border-bottom: 1.5px solid currentColor; }
-.option-icon.icon-option-theme::after { content: ""; position: absolute; width: 7px; height: 7px; border: 1.5px solid currentColor; border-radius: 50%; }
-.option-icon.icon-option-keyboard::after { content: ""; position: absolute; width: 9px; height: 1.5px; background: currentColor; }
 .option-icon { position: relative; color: var(--orange); }
   
   
@@ -1875,109 +1826,6 @@ button:not(.miwy-tb-btn):not(.settings-button):not(.new-file-button):not(.miwy-c
 }  
  
 /* =====================================================  
-   TEMAS DE INTERFAZ  
-===================================================== */  
-/* Oscuro (Default) */ 
-body.theme-oscuro { 
-    --bg:#080808;  
-    --panel:#0d0d0d;  
-    --panel2:#111;  
-    --border:#252525;  
-    --orange:#ff6a00;  
-    --text:#eee;  
-    --muted:#777;  
-    --green:#42d66b;  
-    --danger:#ff4d4d;  
-} 
- 
-/* Claro */ 
-body.theme-claro { 
-    --bg:#f5f5f5;  
-    --panel:#ffffff;  
-    --panel2:#eaeaea;  
-    --border:#cccccc;  
-    --orange:#e65c00;  
-    --text:#1a1a1a;  
-    --muted:#666666;  
-    --green:#2b8a3e;  
-    --danger:#c92a2a;  
-} 
-body.theme-claro .topbar { background: #ffffff; } 
-body.theme-claro .code-panel { background: #fafafa; } 
-body.theme-claro .preview-panel { background: #fafafa; } 
-body.theme-claro .panel-header { background: #ffffff; } 
-body.theme-claro .file-bar { background: #eeeeee; border-bottom-color: #cccccc; } 
-body.theme-claro .file-tab { background: #ffffff; border-color: #cccccc; color: #555555; } 
-body.theme-claro .file-tab.active { background: #ffe8cc; color: #d9480f; border-color: #ffd8a8; } 
-body.theme-claro .code-editor { background: #fafafa; color: #1a1a1a; } 
-body.theme-claro .code-footer { background: #ffffff; } 
-body.theme-claro .settings-panel, 
-body.theme-claro .project-menu, 
-body.theme-claro .dialog { background: #ffffff; border-color: #cccccc; } 
-body.theme-claro .settings-option:hover, 
-body.theme-claro .project-item:hover { background: #f0f0f0; color: #1a1a1a; } 
-body.theme-claro .option-icon { background: #f0f0f0; } 
-body.theme-claro .empty-editor span { background: #ffffff; border-color: #cccccc; color: #666; } 
- 
-/* Cobalto */ 
-body.theme-cobalto { 
-    --bg:#001524;  
-    --panel:#002240;  
-    --panel2:#003366;  
-    --border:#003df240;  
-    --orange:#00aaff;  
-    --text:#e1f5fe;  
-    --muted:#5c7080;  
-    --green:#00e676;  
-    --danger:#ff1744;  
-} 
-body.theme-cobalto .topbar { background: #001524; } 
-body.theme-cobalto .code-panel { background: #001b2e; } 
-body.theme-cobalto .preview-panel { background: #001b2e; } 
-body.theme-cobalto .panel-header { background: #002240; } 
-body.theme-cobalto .file-bar { background: #001726; border-bottom-color: #002c4c; } 
-body.theme-cobalto .file-tab { background: #002240; border-color: #003366; color: #a1c2fa; } 
-body.theme-cobalto .file-tab.active { background: #003366; color: #ffffff; border-color: #00aaff; } 
-body.theme-cobalto .code-editor { background: #001b2e; color: #e1f5fe; } 
-body.theme-cobalto .code-footer { background: #002240; } 
-body.theme-cobalto .settings-panel, 
-body.theme-cobalto .project-menu, 
-body.theme-cobalto .dialog { background: #002240; border-color: #003df240; } 
-body.theme-cobalto .settings-option:hover, 
-body.theme-cobalto .project-item:hover { background: #003366; color: #ffffff; } 
-body.theme-cobalto .option-icon { background: #003366; } 
-body.theme-cobalto .empty-editor span { background: #002240; border-color: #003366; color: #5c7080; } 
- 
-/* Monokai */ 
-body.theme-monokai { 
-    --bg:#1e1e1e;  
-    --panel:#272822;  
-    --panel2:#3e3d32;  
-    --border:#49483e;  
-    --orange:#f92672;  
-    --text:#f8f8f2;  
-    --muted:#75715e;  
-    --green:#a6e22e;  
-    --danger:#f92672;  
-} 
-body.theme-monokai .topbar { background: #1e1e1e; } 
-body.theme-monokai .code-panel { background: #272822; } 
-body.theme-monokai .preview-panel { background: #272822; } 
-body.theme-monokai .panel-header { background: #272822; } 
-body.theme-monokai .file-bar { background: #1e1e1e; border-bottom-color: #3e3d32; } 
-body.theme-monokai .file-tab { background: #272822; border-color: #49483e; color: #f8f8f2; } 
-body.theme-monokai .file-tab.active { background: #3e3d32; color: #a6e22e; border-color: #f92672; } 
-body.theme-monokai .code-editor { background: #272822; color: #f8f8f2; } 
-body.theme-monokai .code-footer { background: #272822; } 
-body.theme-monokai .settings-panel, 
-body.theme-monokai .project-menu, 
-body.theme-monokai .dialog { background: #272822; border-color: #49483e; } 
-body.theme-monokai .settings-option:hover, 
-body.theme-monokai .project-item:hover { background: #3e3d32; color: #ffffff; } 
-body.theme-monokai .option-icon { background: #3e3d32; } 
-body.theme-monokai .empty-editor span { background: #272822; border-color: #49483e; color: #75715e; }
-/* =========================================================
-   MIWY — GALERÍA DE PROYECTOS (MODERN DASHBOARD LAYOUT)
    ========================================================= */
 
 :root {
@@ -2631,7 +2479,6 @@ let updatePreviewTimer = null;
 let previewUpdateSequence = 0;
 let editorSyncTimer = null;
 let syntaxHighlightTimer = null;
-let lastEditorInputAt = 0;
 let storageWorker = null;
 let storageWorkerPending = new Map();
 let storageWorkerMsgId = 0;
@@ -2927,335 +2774,6 @@ function updatePreview() {
 }
 
 
-/* =====================================================
-   COMPILADOR Y ENSAMBLADOR X86 (NASM + GCC + LD) PARA V86
-===================================================== */
-function assembleAndCompileOS(files) {
-    const errors = [];
-    const image = new Uint8Array(1474560); // Imagen Floppy 1.44 MB
-
-    const bootAsmKey = Object.keys(files).find(f => f === "boot.asm" || f.endsWith(".asm") || f.endsWith(".s"));
-    const bootAsm = bootAsmKey ? files[bootAsmKey] : "";
-    const kernelC = files["kernel.c"] || "";
-    const displayC = files["display.c"] || "";
-    const linkerLd = files["linker.ld"] || "";
-
-    // 1. Parser & Assembler x86 (Real Mode / Boot Sector)
-    function assembleNASM(source) {
-        const bytes = [];
-        const labels = {};
-        const lines = source.split("\n");
-        let org = 0x7c00;
-        let pc = 0;
-
-        for (let pass = 1; pass <= 2; pass++) {
-            pc = 0;
-            bytes.length = 0;
-
-            for (let lineNum = 0; lineNum < lines.length; lineNum++) {
-                let line = lines[lineNum].split(";")[0].trim();
-                if (!line) continue;
-
-                // Handle directives
-                if (line.toLowerCase().startsWith("org ")) {
-                    const val = parseInt(line.slice(4).trim(), 16) || parseInt(line.slice(4).trim(), 10);
-                    if (!isNaN(val)) org = val;
-                    continue;
-                }
-                if (line.toLowerCase().startsWith("bits ")) continue;
-
-                // Labels
-                if (line.endsWith(":")) {
-                    const lbl = line.slice(0, -1).trim();
-                    if (pass === 1) labels[lbl] = org + pc;
-                    continue;
-                }
-                if (line.includes(":") && !line.toLowerCase().startsWith("times") && !line.toLowerCase().startsWith("db") && !line.toLowerCase().startsWith("dw")) {
-                    const parts = line.split(":");
-                    const lbl = parts[0].trim();
-                    if (pass === 1) labels[lbl] = org + pc;
-                    line = parts[1].trim();
-                }
-
-                // Directives: times, db, dw, dd
-                if (line.toLowerCase().startsWith("times ")) {
-                    const match = line.match(/times\s+(.*?)\s+db\s+(.*)/i);
-                    if (match) {
-                        let countExpr = match[1].replace(/\$-\$\$/g, pc).replace(/\$/g, org + pc);
-                        let count = 0;
-                        try {
-                            // Safe math evaluation without eval()
-                            const sanitizedExpr = countExpr.replace(/[^0-9+\-*\/().\s]/g, "");
-                            let safeVal = 0;
-                            const matchSub = sanitizedExpr.match(/^\s*(\d+)\s*-\s*(\d+)\s*$/);
-                            if (matchSub) {
-                                safeVal = parseInt(matchSub[1], 10) - parseInt(matchSub[2], 10);
-                            } else {
-                                safeVal = parseInt(sanitizedExpr, 10) || (510 - pc);
-                            }
-                            count = Math.max(0, safeVal);
-                        } catch (e) {
-                            count = Math.max(0, 510 - pc);
-                        }
-                        const fillVal = parseInt(match[2].trim(), 16) || 0;
-                        for (let i = 0; i < count; i++) {
-                            if (pass === 2) bytes.push(fillVal & 0xFF);
-                            pc++;
-                        }
-                    }
-                    continue;
-                }
-
-                if (line.toLowerCase().startsWith("db ")) {
-                    const rawVal = line.slice(3).trim();
-                    if ((rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"))) {
-                        const str = rawVal.slice(1, -1);
-                        for (let i = 0; i < str.length; i++) {
-                            if (pass === 2) bytes.push(str.charCodeAt(i));
-                            pc++;
-                        }
-                    } else {
-                        const items = rawVal.split(",");
-                        for (let item of items) {
-                            item = item.trim();
-                            let v = parseInt(item, 16) || parseInt(item, 10) || 0;
-                            if (pass === 2) bytes.push(v & 0xFF);
-                            pc++;
-                        }
-                    }
-                    continue;
-                }
-
-                if (line.toLowerCase().startsWith("dw ")) {
-                    const items = line.slice(3).trim().split(",");
-                    for (let item of items) {
-                        item = item.trim();
-                        let v = parseInt(item, 16) || parseInt(item, 10) || (labels[item] || 0);
-                        if (pass === 2) {
-                            bytes.push(v & 0xFF);
-                            bytes.push((v >> 8) & 0xFF);
-                        }
-                        pc += 2;
-                    }
-                    continue;
-                }
-
-                // Instruction Assembly
-                const tokens = line.split(/\s+/);
-                const op = tokens[0].toLowerCase();
-                const argsStr = tokens.slice(1).join(" ");
-                const args = argsStr.split(",").map(a => a.trim()).filter(Boolean);
-
-                // Helper to parse immediate numbers and char literals ('M', 0x7C00, 10)
-                function parseImm(valStr) {
-                    if (!valStr) return 0;
-                    valStr = valStr.trim();
-                    if ((valStr.startsWith("'") && valStr.endsWith("'")) || (valStr.startsWith('"') && valStr.endsWith('"'))) {
-                        return valStr.charCodeAt(1) || 0;
-                    }
-                    if (valStr in labels) return labels[valStr];
-                    if (valStr.startsWith("0x") || valStr.startsWith("0X")) return parseInt(valStr, 16) || 0;
-                    if (valStr.endsWith("h") || valStr.endsWith("H")) return parseInt(valStr.slice(0, -1), 16) || 0;
-                    return parseInt(valStr, 10) || 0;
-                }
-
-                if (op === "cli") { if (pass === 2) bytes.push(0xFA); pc += 1; }
-                else if (op === "sti") { if (pass === 2) bytes.push(0xFB); pc += 1; }
-                else if (op === "cld") { if (pass === 2) bytes.push(0xFC); pc += 1; }
-                else if (op === "hlt") { if (pass === 2) bytes.push(0xF4); pc += 1; }
-                else if (op === "nop") { if (pass === 2) bytes.push(0x90); pc += 1; }
-                else if (op === "ret") { if (pass === 2) bytes.push(0xC3); pc += 1; }
-                else if (op === "mov") {
-                    const dst = args[0] ? args[0].toLowerCase() : "";
-                    const src = args[1] ? args[1] : "";
-                    const srcLower = src.toLowerCase();
-
-                    if (dst === "ax") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB8); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "cx") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB9); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "dx") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBA); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "bx") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBB); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "sp") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBC); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "bp") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBD); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "si") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBE); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "di") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xBF); bytes.push(val & 0xFF); bytes.push((val >> 8) & 0xFF); }
-                        pc += 3;
-                    } else if (dst === "al") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB0); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "cl") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB1); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "dl") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB2); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "bl") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB3); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "ah") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB4); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "ch") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB5); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "dh") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB6); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "bh") {
-                        const val = parseImm(src);
-                        if (pass === 2) { bytes.push(0xB7); bytes.push(val & 0xFF); }
-                        pc += 2;
-                    } else if (dst === "ds" && srcLower === "ax") {
-                        if (pass === 2) { bytes.push(0x8E); bytes.push(0xD8); }
-                        pc += 2;
-                    } else if (dst === "es" && srcLower === "ax") {
-                        if (pass === 2) { bytes.push(0x8E); bytes.push(0xC0); }
-                        pc += 2;
-                    } else if (dst === "ss" && srcLower === "ax") {
-                        if (pass === 2) { bytes.push(0x8E); bytes.push(0xD0); }
-                        pc += 2;
-                    } else {
-                        if (pass === 2) bytes.push(0x90);
-                        pc += 1;
-                    }
-                } else if (op === "int") {
-                    const val = parseInt(args[0], 16) || parseInt(args[0], 10) || 0x10;
-                    if (pass === 2) { bytes.push(0xCD); bytes.push(val & 0xFF); }
-                    pc += 2;
-                } else if (op === "jmp") {
-                    const target = args[0];
-                    if (target === "$" || target === "$$") {
-                        if (pass === 2) { bytes.push(0xEB); bytes.push(0xFE); }
-                        pc += 2;
-                    } else if (labels[target] !== undefined) {
-                        const rel = labels[target] - (org + pc + 2);
-                        if (pass === 2) { bytes.push(0xEB); bytes.push(rel & 0xFF); }
-                        pc += 2;
-                    } else {
-                        if (pass === 2) { bytes.push(0xEB); bytes.push(0xFE); }
-                        pc += 2;
-                    }
-                } else if (op === "call") {
-                    const target = args[0];
-                    const destAddr = labels[target] !== undefined ? labels[target] : (parseInt(target, 16) || 0);
-                    const rel = destAddr - (org + pc + 3);
-                    if (pass === 2) { bytes.push(0xE8); bytes.push(rel & 0xFF); bytes.push((rel >> 8) & 0xFF); }
-                    pc += 3;
-                } else {
-                    if (pass === 2) bytes.push(0x90);
-                    pc += 1;
-                }
-            }
-        }
-        return new Uint8Array(bytes);
-    }
-
-    // Assemble Sector 1 (Bootsector)
-    const bootSector = new Uint8Array(512);
-    if (bootAsm) {
-        const assembledBoot = assembleNASM(bootAsm);
-        for (let i = 0; i < Math.min(512, assembledBoot.length); i++) {
-            bootSector[i] = assembledBoot[i];
-        }
-    } else {
-        // Default minimal x86 bootsector if boot.asm is empty
-        const defaultBoot = [
-            0xFA, 0xB8, 0xC0, 0x07, 0x8E, 0xD8, 0x8E, 0xC0,
-            0xB4, 0x0E, 0xB0, 0x4F, 0xCD, 0x10, 0xB0, 0x53, 0xCD, 0x10,
-            0xEB, 0xFE
-        ];
-        bootSector.set(defaultBoot, 0);
-    }
-    // Set 0x55AA signature at byte 510-511
-    bootSector[510] = 0x55;
-    bootSector[511] = 0xAA;
-
-    image.set(bootSector, 0);
-
-    // 2. x86 C Compiler Engine for kernel.c & display.c (Sector 2+)
-    function compileCToX86(cSource) {
-        const payload = [];
-        // Function prolog: push bp / mov bp, sp
-        payload.push(0x55, 0x89, 0xE5);
-
-        // Parse VGA memory operations & string print functions
-        const lines = cSource.split("\n");
-        lines.forEach(line => {
-            line = line.trim();
-            // Detect string literal printing or print_string("...")
-            const printMatch = line.match(/print_string\s*\(\s*["\x27]([^"\x27]*?)["\x27]/i) || line.match(/["\x27]([^"\x27\r\n]{3,})["\x27]/);
-            if (printMatch) {
-                const str = printMatch[1];
-                // mov ah, 0x0E (BIOS Teletype)
-                payload.push(0xB4, 0x0E);
-                for (let i = 0; i < str.length; i++) {
-                    const charCode = str.charCodeAt(i);
-                    // mov al, charCode / int 0x10
-                    payload.push(0xB0, charCode & 0xFF, 0xCD, 0x10);
-                }
-            }
-
-            // Detect VGA memory pointer writes (0xB8000 text mode)
-            if (line.includes("0xB8000") || line.includes("vga[")) {
-                // mov ax, 0xB800 / mov es, ax
-                payload.push(0xB8, 0x00, 0xB8, 0x8E, 0xC0);
-                // mov byte [es:0], character
-                payload.push(0x26, 0xC6, 0x06, 0x00, 0x00, 0x58); // 'X'
-                payload.push(0x26, 0xC6, 0x06, 0x01, 0x00, 0x0F); // attribute 0x0F
-            }
-
-            // Detect VGA Graphics memory writes (0xA0000 Mode 13h)
-            if (line.includes("0xA0000") || line.includes("gfx[")) {
-                // mov ax, 0xA000 / mov es, ax
-                payload.push(0xB8, 0x00, 0xA0, 0x8E, 0xC0);
-            }
-        });
-
-        // Function epilog: pop bp / ret
-        payload.push(0x5D, 0xC3);
-        return new Uint8Array(payload);
-    }
-
-    const fullCCode = (kernelC + "\n" + displayC).trim();
-    if (fullCCode) {
-        const compiledKernel = compileCToX86(fullCCode);
-        for (let i = 0; i < Math.min(1024, compiledKernel.length); i++) {
-            image[512 + i] = compiledKernel[i];
-        }
-    }
-
-    return { success: true, image, errors };
-}
-
 
 function updatePreviewImmediate(sequence = previewUpdateSequence){  
     if (sequence !== previewUpdateSequence) return;
@@ -3323,90 +2841,7 @@ function updatePreviewImmediate(sequence = previewUpdateSequence){
     const activeType = currentFileName ? getFileType(currentFileName) : "";
     const activeContent = (currentFileName && files[currentFileName]) ? files[currentFileName] : "";
 
-        const isOSProject = Object.keys(files).some(f => f === "boot.asm" || f === "kernel.c" || f === "display.c" || f.endsWith(".asm") || f.endsWith(".s"));
-    if (!html && (isOSProject || activeType === "asm" || activeType === "c")) {
-        const buildRes = assembleAndCompileOS(files);
-        const imgArray = Array.from(buildRes.image);
-        const escapedImgData = JSON.stringify(imgArray);
-        const escapedFileName = JSON.stringify(currentFileName || "boot.asm");
-
-        html = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<style>
-  body { background: #08080c; color: #38bdf8; font-family: system-ui, Consolas, monospace; padding: 15px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box; }
-  .v86-header { display: flex; align-items: center; justify-content: space-between; width: 720px; max-width: 100%; margin-bottom: 10px; color: #94a3b8; font-size: 13px; }
-  .badge-v86 { background: #ff6a00; color: #000; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
-  #screen_container { background: black; width: 720px; height: 400px; max-width: 100%; border: 2px solid #1e293b; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-  #screen_container div { white-space: pre; font-family: monospace; color: #42d66b; padding: 10px; font-size: 13px; }
-  #screen_container canvas { width: 100%; height: 100%; display: block; }
-  .status-bar { margin-top: 10px; color: #a1a1aa; font-size: 12px; width: 720px; max-width: 100%; display: flex; justify-content: space-between; }
-</style>
-<script src="https://copy.sh/v86/build/v86_all.js"><\/script>
-</head>
-<body>
-  <div class="v86-header">
-    <span>💻 Emulador x86 (v86) - <strong>${escapeHTML(currentFileName || "sistema.bin")}</strong></span>
-    <span class="badge-v86">BIOS & x86 Hardware</span>
-  </div>
-
-  <div id="screen_container">
-    <div id="v86_text_output">▶ Compilando sistema.bin y arrancando emulador x86 v86...</div>
-    <canvas style="display: none;"></canvas>
-  </div>
-
-  <div class="status-bar">
-    <span id="v86_status">⚡ RAM: 32MB | VGA Mem: 2MB | Floppy: sistema.bin</span>
-    <span style="color: #42d66b;">● v86 Active</span>
-  </div>
-
-  <script>
-    (function() {
-      const imgData = new Uint8Array(${escapedImgData});
-      const blob = new Blob([imgData], { type: "application/octet-stream" });
-      const binaryUrl = URL.createObjectURL(blob);
-      const txtOut = document.getElementById("v86_text_output");
-      const statusEl = document.getElementById("v86_status");
-
-      if (typeof V86Starter !== "undefined") {
-        try {
-          // Keep text container visible for v86 BIOS & VGA text mode
-          txtOut.textContent = "";
-          var emulator = new V86Starter({
-              wasm_path: "https://copy.sh/v86/build/v86.wasm",
-              memory_size: 32 * 1024 * 1024,
-              vga_memory_size: 2 * 1024 * 1024,
-              screen_container: document.getElementById("screen_container"),
-              fda: {
-                  url: binaryUrl,
-              },
-              autostart: true
-          });
-          statusEl.textContent = "✅ Emulador v86 iniciado correctamente con sistema.bin";
-        } catch (err) {
-          txtOut.style.display = "block";
-          txtOut.textContent = "❌ Error al iniciar V86Starter: " + String(err);
-        }
-      } else {
-        txtOut.style.display = "block";
-        txtOut.textContent = "⚡ Ejecución de SO / Bootsector sin conexión a v86_all.js:\n\n";
-        txtOut.textContent += "✔ sistema.bin generado con éxito (512 bytes + kernel payload).\n";
-        txtOut.textContent += "✔ Boot Sector Signature: 0x55AA verificado en offset 510-511.\n\n";
-        txtOut.textContent += "Primeros bytes de sistema.bin:\n";
-        for (let i = 0; i < Math.min(32, imgData.length); i += 16) {
-          let line = ("0000" + i.toString(16)).slice(-4) + ": ";
-          for (let j = 0; j < 16 && (i + j) < imgData.length; j++) {
-            line += ("00" + imgData[i + j].toString(16)).slice(-2) + " ";
-          }
-          txtOut.textContent += line + "\n";
-        }
-      }
-    })();
-  <\/script>
-</body>
-</html>`;
-    } else if (!html && currentFileName) {
+    if (!html && currentFileName) {
         if (activeType === "python") {
             const escapedPy = JSON.stringify(activeContent);
             const escapedPyName = JSON.stringify(currentFileName);
@@ -4282,24 +3717,6 @@ function applySafeAutoFix(filename, errorMsg, lineNum) {
 ===================================================== */  
 document.addEventListener("DOMContentLoaded", function() {
     const previewFrame = document.getElementById("previewFrame");
-    const desktopPreview = document.getElementById("desktopPreview");  
-    const mobilePreview = document.getElementById("mobilePreview");  
-
-    if (desktopPreview && previewFrame) {
-        desktopPreview.addEventListener("click", () => {  
-            previewFrame.className = "preview-frame";
-            desktopPreview.classList.add("active");  
-            if (mobilePreview) mobilePreview.classList.remove("active");  
-        });  
-    }
-
-    if (mobilePreview && previewFrame) {
-        mobilePreview.addEventListener("click", () => {  
-            previewFrame.className = "preview-frame mobile";
-            mobilePreview.classList.add("active");  
-            if (desktopPreview) desktopPreview.classList.remove("active");  
-        });  
-    }
 
 
     // Parent Visual Dock Drag Handler Across Whole Screen (Mouse & Mobile Touch)
@@ -5666,7 +5083,6 @@ function replaceAllMatches() {
                             <button id="copyCodeBtn" class="preview-button" style="height:22px; padding:0 8px; font-size:10px; color:#aaa; gap:4px;" title="Copiar código al portapapeles">📋 Copiar</button>
                         </div>
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <span id="editorSaveStatus" style="font-size:10px; color:#42d66b;">● Guardado</span>
                             <span id="lineCounter" class="editor-position">Ln 1, Col 1</span>  
                         </div>
                     </div>  
@@ -5743,19 +5159,6 @@ function replaceAllMatches() {
                 Editor Visual  
             </button>  
   
-            <button  
-                id="desktopPreview"  
-                class="preview-button active"  
-                title="Vista laptop">  
-                Laptop  
-            </button>  
-  
-            <button  
-                id="mobilePreview"  
-                class="preview-button"  
-                title="Vista teléfono">  
-                Teléfono  
-            </button>  
   
         </div>  
   
@@ -6164,33 +5567,6 @@ function replaceAllMatches() {
   
   
   
-                <button  
-                    id="themeButton"  
-                    class="settings-option">  
-  
-                    <div class="settings-option-left">  
-  
-                        <div class="option-icon icon-option-theme">  
-                            🎨  
-                        </div>  
-  
-                        <div>  
-  
-                            <strong>  
-                                Temas  
-                            </strong>  
-  
-                            <small>  
-                                Seleccionar tema de interfaz  
-                            </small>  
-  
-                        </div>  
-  
-                    </div>  
-  
-                    ›  
-  
-                </button>  
 
                 <button  
                     id="shortcutsButton"  
@@ -6265,11 +5641,6 @@ function replaceAllMatches() {
                     <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + E</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Alternar vista Laptop/Teléfono</span>
-                    <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + P</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#151515; padding:8px 12px; border-radius:6px; border:1px solid #222;">
-                    <span style="font-size:11px; color:#aaa;">Abrir Configuración</span>
                     <span class="key-cap" style="background:#222; border:1px solid #333; padding:2px 6px; border-radius:4px; font-size:10px; color:var(--orange);">Ctrl + ,</span>
                 </div>
             </div>
@@ -6310,60 +5681,6 @@ function replaceAllMatches() {
         </div>  
   
   
-        <!-- TEMAS -->  
-        <div  
-            id="themeSection"  
-            class="settings-section">  
-  
-            <button  
-                class="section-back"  
-                data-back>  
-                ← Volver  
-            </button>  
-  
-            <div class="section-title">  
-                Seleccionar Tema  
-            </div>  
-  
-            <div class="version-list"> 
-                <button class="settings-option theme-option-btn" data-theme="oscuro"> 
-                    <div class="settings-option-left"> 
-                        <div class="option-icon" style="background:#111; border: 1px solid #444; width: 24px; height: 24px;"></div> 
-                        <div> 
-                            <strong>Oscuro</strong> 
-                            <small>Fondo oscuro original (predeterminado)</small> 
-                        </div> 
-                    </div> 
-                </button> 
-                <button class="settings-option theme-option-btn" data-theme="claro"> 
-                    <div class="settings-option-left"> 
-                        <div class="option-icon" style="background:#eee; border: 1px solid #ccc; width: 24px; height: 24px;"></div> 
-                        <div> 
-                            <strong>Claro</strong> 
-                            <small>Interfaz brillante y limpia</small> 
-                        </div> 
-                    </div> 
-                </button> 
-                <button class="settings-option theme-option-btn" data-theme="cobalto"> 
-                    <div class="settings-option-left"> 
-                        <div class="option-icon" style="background:#002240; border: 1px solid #00aaff; width: 24px; height: 24px;"></div> 
-                        <div> 
-                            <strong>Cobalto</strong> 
-                            <small>Azul profundo con acentos neón</small> 
-                        </div> 
-                    </div> 
-                </button> 
-                <button class="settings-option theme-option-btn" data-theme="monokai"> 
-                    <div class="settings-option-left"> 
-                        <div class="option-icon" style="background:#272822; border: 1px solid #f92672; width: 24px; height: 24px;"></div> 
-                        <div> 
-                            <strong>Monokai</strong> 
-                            <small>Estilo de contraste para código</small> 
-                        </div> 
-                    </div> 
-                </button> 
-            </div> 
-        </div>  
  
  
         <!-- VERSIONES -->  
@@ -7864,7 +7181,6 @@ codeEditor.addEventListener(
         )  
             return;  
 
-        lastEditorInputAt = Date.now();
   
         updateLineCounter();
 
@@ -7879,12 +7195,6 @@ codeEditor.addEventListener(
         }, hlDelay);
 
         syncEditorToProject();
-        const statusEl = document.getElementById("editorSaveStatus");
-        if (statusEl) {
-            statusEl.textContent = "● Guardando...";
-            statusEl.style.color = "var(--orange)";
-        }
-
         clearTimeout(editorSyncTimer);
         const saveDelay = codeEditor.value.length > LARGE_FILE_THRESHOLD ? 700 : 150;
         editorSyncTimer = setTimeout(() => {
@@ -7962,21 +7272,6 @@ codeEditor.addEventListener("scroll", () => {
     }
 });
 
-function autoSaveProjectState(){
-    try {
-        const editorSize = codeEditor && !codeEditor.disabled ? codeEditor.value.length : 0;
-        if (editorSize > LARGE_FILE_THRESHOLD) {
-            if (Date.now() - lastEditorInputAt >= 3000 && typeof saveCurrentFile === "function") saveCurrentFile();
-            return;
-        }
-        if (typeof saveCurrentFile === "function") saveCurrentFile();
-        if (typeof saveProjects === "function") saveProjects();
-    } catch (error) {
-        console.warn("autoSaveProjectState falló:", error);
-    }
-}
-
-setInterval(autoSaveProjectState, 15000);
   
   
 /* =====================================================  
@@ -8533,92 +7828,7 @@ function saveProjectDialog(){
         saveCurrentFile();  
   
   
-        const isOSName = /so|os|system|sistema|kernel|boot/i.test(name);
-        const defaultProjectFiles = isOSName ? {
-            "boot.asm": `[BITS 16]
-[ORG 0x7C00]
-
-start:
-    cli
-    mov ax, 0x07C0
-    mov ds, ax
-    mov es, ax
-    mov ss, ax
-    mov sp, 0x7C00
-
-    mov ah, 0x0E
-    mov al, 'M'
-    int 0x10
-    mov al, 'i'
-    int 0x10
-    mov al, 'w'
-    int 0x10
-    mov al, 'y'
-    int 0x10
-    mov al, 'O'
-    int 0x10
-    mov al, 'S'
-    int 0x10
-    mov al, ' '
-    int 0x10
-    mov al, 'v'
-    int 0x10
-    mov al, '1'
-    int 0x10
-
-hang:
-    jmp hang
-
-times 510-($-$$) db 0
-dw 0xAA55
-`,
-            "kernel.c": `/* Kernel de Sistema Operativo x86 */
-#include "display.h"
-
-void kernel_main() {
-    clear_screen();
-    print_string("Miwy Kernel x86 Inicializado Correctamente!\n", 0x0F);
-    draw_vga_banner();
-}
-`,
-            "display.c": `/* Controlador de Pantalla VGA (Text Mode 0xB8000 & Graphics 0xA0000) */
-#include "display.h"
-
-void clear_screen() {
-    volatile char* vga = (volatile char*)0xB8000;
-    for (int i = 0; i < 80 * 25 * 2; i += 2) {
-        vga[i] = ' ';
-        vga[i + 1] = 0x07;
-    }
-}
-
-void print_string(const char* str, char color) {
-    volatile char* vga = (volatile char*)0xB8000;
-    while (*str) {
-        *vga++ = *str++;
-        *vga++ = color;
-    }
-}
-
-void draw_vga_banner() {
-    unsigned char* gfx = (unsigned char*)0xA0000;
-    for (int y = 0; y < 200; y++) {
-        for (int x = 0; x < 320; x++) {
-            gfx[y * 320 + x] = (x + y) % 256;
-        }
-    }
-}
-`,
-            "linker.ld": `ENTRY(start)
-SECTIONS
-{
-    . = 0x7C00;
-    .text : { *(.text) }
-    .data : { *(.data) }
-    .bss  : { *(.bss) }
-}
-`
-        } : {
+        const defaultProjectFiles = {
             "index.html": `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9061,11 +8271,6 @@ const repositorySection =
         "repositorySection"  
     );  
  
-const themeSection =  
-    document.getElementById(  
-        "themeSection"  
-    );  
-  
   
 document  
     .getElementById("settingsButton")  
@@ -9111,11 +8316,6 @@ function showSettingsMain(){
         saveDevSection.classList.remove("active");
     }
  
-    if (themeSection) { 
-        themeSection.classList.remove(  
-            "active"  
-        );  
-    } 
 
     const visSection = document.getElementById("visualEditorSection");
     if (visSection) {
@@ -9190,18 +8390,6 @@ document
     );  
   
   
-/* Auto-save cada 15 minutos (900,000 ms) */
-setInterval(() => {
-    const editorSize = codeEditor && !codeEditor.disabled ? codeEditor.value.length : 0;
-    saveCurrentFile();
-    if (editorSize <= LARGE_FILE_THRESHOLD) saveProjects();
-    const current = getCurrentProject();
-    if (current) {
-        if (typeof showTopNotification === "function") {
-            showTopNotification(`💾 Guardado automático: "${current.name}" guardado`, null, 3000);
-        }
-    }
-}, 15 * 60 * 1000);
 
 function runProjectDiagnostics() {
     const project = typeof getCurrentProject === "function" ? getCurrentProject() : null;
@@ -9286,37 +8474,6 @@ function runProjectDiagnostics() {
             }
         }
 
-        // 3. Análisis y Linter de Ensamblador Assembly (.asm)
-        if (fileType === "asm") {
-            const lines = content.split("\n");
-            lines.forEach((line, idx) => {
-                const lineNum = idx + 1;
-                const cleanLine = line.split(";")[0].trim();
-                if (!cleanLine) return;
-
-                // Validar comillas o apóstrofes sin cerrar
-                const doubleQuotes = (cleanLine.match(/"/g) || []).length;
-                const singleQuotes = (cleanLine.match(/'/g) || []).length;
-                if (doubleQuotes % 2 !== 0 || singleQuotes % 2 !== 0) {
-                    allIssues.push({
-                        file: filename,
-                        line: lineNum,
-                        type: "error",
-                        message: `[Sintaxis Assembly] Cadena de texto o comilla sin cerrar`
-                    });
-                }
-            });
-
-            // Verificar firma de arranque 0x55AA si es un bootsector
-            if (filename.includes("boot") && !content.includes("0xAA55") && !content.includes("0xaa55") && !content.includes("55aa")) {
-                allIssues.push({
-                    file: filename,
-                    line: lines.length,
-                    type: "warning",
-                    message: `[Bootsector ASM] Advertencia: Falta la firma de arranque estándar dw 0xAA55 al final`
-                });
-            }
-        }
 
         // 4. Análisis y Linter de C (.c)
         if (fileType === "c") {
@@ -9419,27 +8576,6 @@ function lintAndFixCurrentCode() {
  
  
 /* =====================================================  
-   TEMAS DE INTERFAZ (LOGIC)  
-===================================================== */  
-function applyTheme(themeName) { 
-    const validThemes = ["oscuro", "claro", "cobalto", "monokai"];
-    if (!validThemes.includes(themeName)) themeName = "oscuro";
-    document.body.classList.remove("theme-oscuro", "theme-claro", "theme-cobalto", "theme-monokai"); 
-    document.body.classList.add("theme-" + themeName); 
-    localStorage.setItem("miwy_theme", themeName); 
-    document.querySelectorAll(".theme-option-btn").forEach(btn => { 
-        if (btn.getAttribute("data-theme") === themeName) { 
-            btn.classList.add("active"); 
-            btn.style.borderColor = "var(--orange)"; 
-        } else { 
-            btn.classList.remove("active"); 
-            btn.style.borderColor = ""; 
-        } 
-    }); 
-} 
-
-const exportProjSettingsBtn = document.getElementById("exportProjectSettingsBtn");
-const exportDialog = document.getElementById("exportDialog");
 const cancelExportBtn = document.getElementById("cancelExport");
 const confirmExportBtn = document.getElementById("confirmExport");
 
@@ -9628,22 +8764,6 @@ if (importProjectInput) {
     }); 
 } 
 
-document.querySelectorAll(".theme-option-btn").forEach(btn => { 
-    btn.addEventListener("click", () => { 
-        const selected = btn.getAttribute("data-theme"); 
-        applyTheme(selected); 
-    }); 
-}); 
-
-const themeBtn = document.getElementById("themeButton"); 
-if (themeBtn) { 
-    themeBtn.addEventListener("click", () => { 
-        settingsMain.style.display = "none"; 
-        themeSection.classList.add("active"); 
-    }); 
-} 
-
-applyTheme(localStorage.getItem("miwy_theme") || "oscuro"); 
 
 document.querySelectorAll("[data-back]").forEach(button => { 
     button.addEventListener("click", showSettingsMain); 
@@ -9809,28 +8929,6 @@ document.addEventListener("touchcancel", stopWorkspaceResize);
   
   
 /* =====================================================  
-   VISTA MÓVIL / LAPTOP
-===================================================== */  
-  
-const desktopPreview = document.getElementById("desktopPreview");  
-const mobilePreview = document.getElementById("mobilePreview");  
-
-if (desktopPreview) {
-    desktopPreview.addEventListener("click", () => {  
-        previewFrame.className = "preview-frame";
-        desktopPreview.classList.add("active");  
-        if (mobilePreview) mobilePreview.classList.remove("active");  
-    });  
-}
-
-if (mobilePreview) {
-    mobilePreview.addEventListener("click", () => {  
-        previewFrame.className = "preview-frame mobile";
-        mobilePreview.classList.add("active");  
-        if (desktopPreview) desktopPreview.classList.remove("active");  
-    });  
-}
-  
   
 /* =====================================================  
    COPIAR CÓDIGO  
@@ -9901,21 +8999,6 @@ window.addEventListener("keydown", function(event) {
         } 
     } 
  
-    // Ctrl + P: Toggle Vista laptop/teléfono 
-    if (isCtrl && key === 'p') { 
-        event.preventDefault(); 
-        const desktopBtn = document.getElementById("desktopPreview"); 
-        const mobileBtn = document.getElementById("mobilePreview"); 
-        if (desktopBtn && mobileBtn) { 
-            if (mobileBtn.classList.contains("active")) { 
-                desktopBtn.click(); 
-                showShortcutToast("Ctrl + P", "Vista laptop activada"); 
-            } else { 
-                mobileBtn.click(); 
-                showShortcutToast("Ctrl + P", "Vista teléfono activada"); 
-            } 
-        } 
-    } 
  
     // Ctrl + F: Buscar y Reemplazar
     if (isCtrl && key === 'f') {
