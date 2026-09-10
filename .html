@@ -1217,13 +1217,12 @@ button.iconized.icon-play::before{ content:""; width:0; height:0; border-top:5px
 .dialog-buttons .dialog-cancel, .dialog-buttons .dialog-confirm { font-size:11px; }
 .close-settings { font-size:16px; }
 
-button:not(.miwy-tb-btn):not(.settings-button):not(.new-file-button):not(.miwy-create-project):not(.create-project):not(.miwy-delete-btn)::before,
-button:not(.miwy-tb-btn):not(.settings-button):not(.new-file-button):not(.miwy-create-project):not(.create-project):not(.miwy-delete-btn)::after {
+button:not(.miwy-tb-btn):not(.new-file-button):not(.miwy-create-project):not(.create-project):not(.miwy-delete-btn)::before,
+button:not(.miwy-tb-btn):not(.new-file-button):not(.miwy-create-project):not(.create-project):not(.miwy-delete-btn)::after {
     content: none !important;
     display: none !important;
 }
 
-.settings-button::before,
 .new-file-button::before,
 .miwy-create-project::before,
 .create-project::before,
@@ -1233,14 +1232,6 @@ button:not(.miwy-tb-btn):not(.settings-button):not(.new-file-button):not(.miwy-c
     display: inline-block !important;
     position: relative;
     flex: 0 0 auto;
-}
-
-.settings-button::before {
-    width: 14px;
-    height: 14px;
-    border: 1.5px solid currentColor;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 3px transparent, 0 0 0 2px #111820;
 }
 
 .new-file-button::before,
@@ -5345,8 +5336,9 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
 
     <button  
         id="settingsButton"  
-        class="settings-button">  
-        ⚙  
+        class="settings-button"
+        title="Configuración">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>  
   
 </header>  
@@ -8253,45 +8245,7 @@ function saveProjectDialog(){
         saveCurrentFile();  
   
   
-        const defaultProjectFiles = {
-            "index.html": `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>${name}</title>
-<style>
-/* TEMAS: CLARO Y OSCURO */
-body.theme-claro {
-    --bg-dark: #f8fafc;
-    --bg-panel: #ffffff;
-    --bg-card: #f1f5f9;
-    --border-color: #cbd5e1;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --editor-bg: #ffffff;
-    --header-bg: #f1f5f9;
-    color: #0f172a;
-}
-body.theme-claro .workspace, 
-body.theme-claro .code-panel, 
-body.theme-claro .preview-panel, 
-body.theme-claro .panel-header, 
-body.theme-claro .miwy-gallery {
-    background: #f8fafc;
-    color: #0f172a;
-}
-body.theme-claro .file-tree, body.theme-claro .editor-container {
-    background: #ffffff;
-    color: #0f172a;
-}
-</style>
-</head>
-<body>
-    <h1>🚀 ${name}</h1>
-    <p>Proyecto iniciado en Miwy IDE.</p>
-</body>
-</html>`
-        };
+        const defaultProjectFiles = {};
 
         const project = {
             id: Date.now().toString(),
