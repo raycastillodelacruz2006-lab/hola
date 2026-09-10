@@ -644,6 +644,8 @@ button{border:0;cursor:pointer}
     overflow: hidden;  
     position: relative;
     box-sizing: border-box;
+    width: 100%;
+    height: 100%;
 }  
   
 .preview-frame{  
@@ -665,10 +667,11 @@ button{border:0;cursor:pointer}
     width: auto;
     aspect-ratio: 9 / 18.5;
     max-width: calc(100% - 32px);
-    margin: 16px;
+    margin: 16px auto;
     border-radius: 28px;
     border: 8px solid #1a1a1a;
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    object-fit: contain;
 }
 
 
@@ -1689,23 +1692,59 @@ button:not(.miwy-tb-btn):not(.new-file-button):not(.miwy-create-project):not(.cr
 }
 
 .miwy-floating-dock.dock-fixed-top {
-    top: 8px;
+    top: 6px;
     bottom: auto;
     left: 175px;
     right: 58px;
     transform: none;
     width: auto;
     max-width: none;
-    border-radius: 10px;
-    padding: 3px 10px;
-    background: transparent;
-    border: none;
+    border-radius: 8px;
+    padding: 2px 14px;
+    background: rgba(10, 14, 18, 0.85);
+    border: 1px solid #ff6a0044;
     box-shadow: none;
-    backdrop-filter: none;
+    backdrop-filter: blur(8px);
+    align-items: center;
+    gap: 16px;
+    height: 38px;
 }
 
 .miwy-floating-dock.dock-fixed-top .miwy-dock-drag-handle {
     display: none !important;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-dock-group {
+    gap: 10px;
+    padding-right: 12px;
+    align-items: center;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-tb-item {
+    gap: 2px;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-tb-btn {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    font-size: 11px;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-tb-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-chromatic-circle {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+}
+
+.miwy-floating-dock.dock-fixed-top .miwy-tb-label {
+    font-size: 9px;
+    opacity: 0.85;
 }
 
 .miwy-floating-dock.dock-vertical {
@@ -3370,8 +3409,24 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
         var style = document.createElement('style'); 
         style.id = '__miwy_visual_style__'; 
         style.textContent = \` 
+            html, body {
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                overflow-x: hidden !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+            }
             body {
                 user-select: none !important;
+            }
+            * {
+                box-sizing: border-box !important;
+                max-width: 100% !important;
+            }
+            pre, code {
+                white-space: pre-wrap !important;
+                word-break: break-all !important;
+                overflow-x: auto !important;
             }
             [data-miwy-editable]:hover { 
                 outline: 1.5px dashed #ff6a00 !important; 
@@ -3743,8 +3798,8 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
  
     function sendCleanHtml() { 
         var clone = document.documentElement.cloneNode(true); 
-        var visStyle = clone.querySelector('#__miwy_visual_style__'); 
-        if (visStyle) visStyle.remove(); 
+        var visStyles = clone.querySelectorAll('#__miwy_visual_style__');
+        visStyles.forEach(function(vs) { vs.remove(); });
  
         var systemElements = clone.querySelectorAll('[data-miwy-system], .miwy-resize-corner, .miwy-move-handle, .miwy-minimal-toolbar, .miwy-floating-dock');
         systemElements.forEach(function(s) { s.remove(); });
@@ -3755,6 +3810,14 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
             el.removeAttribute('data-miwy-editable'); 
             el.removeAttribute('data-miwy-selected'); 
         }); 
+
+        // Remove duplicate injected visual editor script tags if present in clone
+        var scripts = clone.querySelectorAll('script');
+        scripts.forEach(function(sc) {
+            if (sc.textContent && sc.textContent.includes('initVisualEditor')) {
+                sc.remove();
+            }
+        });
  
         var htmlStr = '<!DOCTYPE html>\\n<html' + (clone.getAttribute('lang') ? ' lang="' + clone.getAttribute('lang') + '"' : '') + '>' + clone.innerHTML + '\\n</html>'; 
         window.parent.postMessage({ 
