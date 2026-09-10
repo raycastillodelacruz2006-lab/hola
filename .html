@@ -1687,6 +1687,20 @@ button:not(.miwy-tb-btn):not(.new-file-button):not(.miwy-create-project):not(.cr
     max-width: calc(100vw - 32px);
     overflow-x: auto;
 }
+
+.miwy-floating-dock.dock-fixed-top {
+    top: 7px;
+    bottom: auto;
+    left: 175px;
+    right: 60px;
+    transform: none;
+    width: calc(100vw - 235px);
+    max-width: none;
+    border-radius: 12px;
+    padding: 4px 10px;
+    background: rgba(13, 19, 25, 0.98);
+    border: 1px solid #2d9eae;
+}
 .miwy-dock-group {
     display: flex;
     align-items: flex-start;
@@ -2716,6 +2730,7 @@ function updateDockSettingsUI() {
     const fixedBtn = document.getElementById("dockPosFixedBtn");
     const floatingCheck = document.getElementById("dockPosFloatingCheck");
     const fixedCheck = document.getElementById("dockPosFixedCheck");
+    const subOptions = document.getElementById("floatingSubOptions");
 
     if (floatingBtn && fixedBtn) {
         if (posMode === "fixed") {
@@ -2723,11 +2738,13 @@ function updateDockSettingsUI() {
             floatingBtn.style.borderColor = "rgba(255,255,255,0.06)";
             if (fixedCheck) fixedCheck.style.display = "inline";
             if (floatingCheck) floatingCheck.style.display = "none";
+            if (subOptions) subOptions.style.display = "none";
         } else {
             floatingBtn.style.borderColor = "var(--orange)";
             fixedBtn.style.borderColor = "rgba(255,255,255,0.06)";
             if (floatingCheck) floatingCheck.style.display = "inline";
             if (fixedCheck) fixedCheck.style.display = "none";
+            if (subOptions) subOptions.style.display = "flex";
         }
     }
 
@@ -2763,12 +2780,14 @@ function restoreDockPosition() {
 
     const posMode = getDockPositionMode();
     if (posMode === "fixed") {
-        parentDock.style.top = "10px";
-        parentDock.style.left = "50%";
-        parentDock.style.bottom = "auto";
-        parentDock.style.right = "auto";
-        parentDock.style.transform = "translateX(-50%)";
+        parentDock.classList.add("dock-fixed-top");
+        parentDock.style.top = "";
+        parentDock.style.bottom = "";
+        parentDock.style.left = "";
+        parentDock.style.right = "";
+        parentDock.style.transform = "";
     } else {
+        parentDock.classList.remove("dock-fixed-top");
         parentDock.style.left = "50%";
         parentDock.style.top = "auto";
         parentDock.style.bottom = "20px";
@@ -5225,23 +5244,12 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
   
     <div class="panel-header">  
   
-        <div class="panel-name">  
-            <strong>  
-                Vista de aplicación  
-            </strong>  
-        </div>  
-  
-  
-        <div class="preview-controls">  
-  
-            <button id="desktopPreview" class="preview-button active" title="Vista Laptop / Escritorio" onclick="setPreviewDeviceMode('desktop')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>Laptop</button>
-            <button id="mobilePreview" class="preview-button" title="Vista Teléfono Movil" onclick="setPreviewDeviceMode('mobile')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Teléfono</button>
-
-            <span class="panel-name">  
-                <span style="color:#42d66b;">●</span>  
-                Live  
-            </span>  
- 
+        <div class="panel-left" style="gap:10px;">
+            <div class="panel-name">
+                <strong>
+                    Vista de aplicación
+                </strong>
+            </div>
 
             <button  
                 id="visualEditBtn"  
@@ -5250,8 +5258,9 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
                 onclick="toggleVisualEdit()">  
                 Editor Visual  
             </button>  
-  
-  
+
+            <button id="desktopPreview" class="preview-button active" title="Vista Laptop / Escritorio" onclick="setPreviewDeviceMode('desktop')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="20" x2="22" y2="20"></line></svg>Laptop</button>
+            <button id="mobilePreview" class="preview-button" title="Vista Teléfono Movil" onclick="setPreviewDeviceMode('mobile')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>Teléfono</button>
         </div>  
   
     </div>  
@@ -5750,35 +5759,34 @@ body.theme-claro .file-tree, body.theme-claro .editor-container {
             </button>  
   
             <div class="section-title">  
-                Controles de Editor Visual  
+                Controles del Editor Visual
             </div>  
   
-            <label class="repo-label">Posición de Controles del Editor</label>
             <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
                 <button id="dockPosFloatingBtn" class="settings-option" style="height:48px; border-radius:10px;">
                     <div class="settings-option-left">
                         <div>
                             <strong>Flotante</strong>
-                            <small>Controles móviles arrastrabiles</small>
+                            <small>Controles móviles arrastrables</small>
                         </div>
                     </div>
                     <span id="dockPosFloatingCheck" style="color:var(--orange); font-size:14px; font-weight:bold;">✓</span>
                 </button>
+
+                <div id="floatingSubOptions" style="display:flex; gap:8px; padding-left:14px; margin-bottom:4px;">
+                    <button id="dockOrientHorizontalBtn" class="version-action" style="flex:1; height:36px; font-weight:bold;">↔️ Horizontal</button>
+                    <button id="dockOrientVerticalBtn" class="version-action" style="flex:1; height:36px; font-weight:bold;">↕️ Vertical</button>
+                </div>
+
                 <button id="dockPosFixedBtn" class="settings-option" style="height:48px; border-radius:10px;">
                     <div class="settings-option-left">
                         <div>
-                            <strong>Superior (Fijo)</strong>
-                            <small>Fijado arriba junto a MIWY</small>
+                            <strong>Superior fijo</strong>
+                            <small>Anclado en la cabecera superior</small>
                         </div>
                     </div>
                     <span id="dockPosFixedCheck" style="color:var(--orange); font-size:14px; font-weight:bold; display:none;">✓</span>
                 </button>
-            </div>
-
-            <label class="repo-label">Orientación de Controles Flotantes</label>
-            <div style="display:flex; gap:8px; margin-bottom:16px;">
-                <button id="dockOrientHorizontalBtn" class="version-action" style="flex:1; height:36px; font-weight:bold;">↔️ Horizontal</button>
-                <button id="dockOrientVerticalBtn" class="version-action" style="flex:1; height:36px; font-weight:bold;">↕️ Vertical</button>
             </div>
 
             <label class="repo-label" style="margin-top:12px;">Herramientas del Editor</label>
